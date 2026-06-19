@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ndebe Trade Pro - Synthetic Index Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0A0618 0%, #05030F 100%);
+            color: #E8E8E8;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated background blobs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(155, 89, 182, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(155, 89, 182, 0.08) 0%, transparent 50%);
+            animation: driftGlow 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes driftGlow {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -30px); }
+            50% { transform: translate(-20px, 30px); }
+            75% { transform: translate(40px, 20px); }
+        }
+
+        /* Bob animation for buttons */
+        @keyframes bobbing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #9B59B6;
+            text-shadow: 0 0 20px rgba(155, 89, 182, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #999;
+            letter-spacing: 1px;
+        }
+
+        /* Market dropdown */
+        .market-section {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #9B59B6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        select {
+            padding: 10px 15px;
+            background: rgba(155, 89, 182, 0.1);
+            border: 2px solid #9B59B6;
+            color: #E8E8E8;
+            border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        select:hover {
+            background: rgba(155, 89, 182, 0.2);
+            box-shadow: 0 0 15px rgba(155, 89, 182, 0.3);
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.5);
+        }
+
+        /* Live price section */
+        .live-price-section {
+            background: rgba(20, 10, 30, 0.8);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .price-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .current-price {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #00FF88;
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+        }
+
+        .price-label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tick-feed {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .tick-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: rgba(155, 89, 182, 0.2);
+            border: 1px solid rgba(155, 89, 182, 0.5);
+            color: #E8E8E8;
+            animation: slideIn 0.3s ease;
+        }
+
+        .tick-chip.up {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00FF88;
+            color: #00FF88;
+        }
+
+        .tick-chip.down {
+            background: rgba(255, 51, 102, 0.2);
+            border-color: #FF3366;
+            color: #FF3366;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Button styles */
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: bobbing 3s ease-in-out infinite;
+        }
+
+        button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            animation: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #9B59B6, #8E44AD);
+            color: white;
+            border: 2px solid #9B59B6;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #A06AC5, #9952B8);
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.5);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00FF88, #00DD77);
+            color: #0A0618;
+            border: 2px solid #00FF88;
+            font-weight: 700;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #FF3366, #E61E3E);
+            color: white;
+            border: 2px solid #FF3366;
+            font-weight: 700;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #FFD700, #FFC700);
+            color: #0A0618;
+            border: 2px solid #FFD700;
+            font-weight: 700;
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Control sections */
+        .control-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Progress bars */
+        .progress-container {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .progress-label {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(155, 89, 182, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(155, 89, 182, 0.3);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9B59B6, #00FF88);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(155, 89, 182, 0.5);
+        }
+
+        /* Chart section */
+        .chart-section {
+            background: rgba(20, 10, 30, 0.8);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #9B59B6;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 8px;
+            height: 250px;
+            margin-bottom: 15px;
+        }
+
+        .bar {
+            flex: 1;
+            max-width: 60px;
+            background: linear-gradient(180deg, #9B59B6, #6C2E7A);
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(155, 89, 182, 0.5);
+            min-height: 10px;
+        }
+
+        .bar:hover {
+            background: linear-gradient(180deg, #A06AC5, #7D3A8A);
+            box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #999;
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #00FF88;
+            font-weight: 600;
+        }
+
+        .chart-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .stat-label {
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            color: #00FF88;
+            font-weight: 600;
+        }
+
+        /* Result card */
+        .result-card {
+            background: rgba(20, 10, 30, 0.8);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            border-color: rgba(155, 89, 182, 0.6);
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.2);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .result-market {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #9B59B6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .quality-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .quality-badge.clean {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00FF88;
+            color: #00FF88;
+        }
+
+        .quality-badge.caution {
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #FFD700;
+            color: #FFD700;
+        }
+
+        .quality-badge.clustering {
+            background: rgba(255, 51, 102, 0.2);
+            border: 1px solid #FF3366;
+            color: #FF3366;
+        }
+
+        .result-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-item-label {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .result-item-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #00FF88;
+        }
+
+        .result-item-value.differs {
+            color: #FF3366;
+        }
+
+        .result-item-value.over-under {
+            color: #FFD700;
+        }
+
+        /* Streak tracker */
+        .streak-section {
+            background: rgba(20, 10, 30, 0.8);
+            border: 2px solid rgba(155, 89, 182, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .streak-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #9B59B6;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .streak-note {
+            font-size: 0.85rem;
+            color: #FFD700;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 3px solid #FFD700;
+            border-radius: 4px;
+        }
+
+        .streak-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .streak-item {
+            background: rgba(155, 89, 182, 0.1);
+            border: 1px solid rgba(155, 89, 182, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .streak-item-title {
+            font-size: 0.85rem;
+            color: #9B59B6;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .streak-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .streak-stat-label {
+            color: #999;
+        }
+
+        .streak-stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00FF88;
+            font-weight: 600;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: rgba(255, 51, 102, 0.1);
+            border: 2px solid #FF3366;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #E8E8E8;
+        }
+
+        .disclaimer-title {
+            font-weight: 700;
+            color: #FF3366;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Loading state */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(155, 89, 182, 0.3);
+            border-top-color: #9B59B6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .control-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .progress-container {
+                width: 100%;
+            }
+
+            .result-body {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+
+            .bar-label {
+                font-size: 0.8rem;
+                bottom: -20px;
+            }
+        }
+
+        /* Status indicator */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .status-indicator.connected {
+            background: #00FF88;
+            box-shadow: 0 0 10px #00FF88;
+        }
+
+        .status-indicator.connecting {
+            background: #FFD700;
+            box-shadow: 0 0 10px #FFD700;
+        }
+
+        .status-indicator.disconnected {
+            background: #FF3366;
+            box-shadow: 0 0 10px #FF3366;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ndebe Trade Pro</h1>
+            <p class="subtitle">Synthetic Index Digit Statistics Monitor</p>
+        </header>
+
+        <!-- Market Selection -->
+        <div class="market-section">
+            <label for="marketSelect">Select Market:</label>
+            <select id="marketSelect">
+                <optgroup label="Volatility Indices">
+                    <option value="R_10">R_10 (Volatility 10)</option>
+                    <option value="R_25">R_25 (Volatility 25)</option>
+                    <option value="R_50">R_50 (Volatility 50)</option>
+                    <option value="R_75">R_75 (Volatility 75)</option>
+                    <option value="R_100">R_100 (Volatility 100)</option>
+                </optgroup>
+                <optgroup label="1s Volatility Indices">
+                    <option value="1HZ10V">1HZ10V (1s Volatility 10)</option>
+                    <option value="1HZ25V">1HZ25V (1s Volatility 25)</option>
+                    <option value="1HZ50V">1HZ50V (1s Volatility 50)</option>
+                    <option value="1HZ75V">1HZ75V (1s Volatility 75)</option>
+                    <option value="1HZ100V">1HZ100V (1s Volatility 100)</option>
+                </optgroup>
+                <optgroup label="Jump Indices">
+                    <option value="JD10">JD10 (Jump 10)</option>
+                    <option value="JD25">JD25 (Jump 25)</option>
+                </optgroup>
+            </select>
+            <span>
+                <span class="status-indicator connecting"></span>
+                <span id="connectionStatus">Connecting...</span>
+            </span>
+        </div>
+
+        <!-- Live Price Section -->
+        <div class="live-price-section">
+            <div class="price-display">
+                <div class="current-price" id="currentPrice">-</div>
+                <div class="price-label" id="marketLabel">R_10</div>
+            </div>
+            <div class="tick-feed" id="tickFeed"></div>
+        </div>
+
+        <!-- Scan Controls -->
+        <div class="control-section">
+            <button class="btn-primary" id="scanAllButton">Scan All Markets</button>
+            
+            <div class="progress-container">
+                <div class="progress-label">Quick Preview (30 ticks)</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress30"></div>
+                </div>
+                <div style="font-size: 0.75rem; color: #999; margin-top: 3px;" id="progress30Text">0/30</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-label">Full Scan (200 ticks)</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress200"></div>
+                </div>
+                <div style="font-size: 0.75rem; color: #999; margin-top: 3px;" id="progress200Text">0/200</div>
+            </div>
+        </div>
+
+        <!-- Digit Frequency Chart -->
+        <div class="chart-section">
+            <div class="chart-title">Digit Frequency Distribution</div>
+            <div class="chart-container" id="chartContainer"></div>
+            <div class="chart-stats">
+                <div class="stat">
+                    <div class="stat-label">Chi-Square Score</div>
+                    <div class="stat-value" id="chiSquareValue">-</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Data Points</div>
+                    <div class="stat-value" id="dataPointsValue">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Significant</div>
+                    <div class="stat-value" id="significantValue">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prediction Buttons -->
+        <div class="control-section">
+            <button class="btn-success" id="matchesButton" disabled>Run Matches Analysis</button>
+            <button class="btn-danger" id="differsButton" disabled>Run Differs Analysis</button>
+            <button class="btn-warning" id="overUnderButton" disabled>Run Over/Under Analysis</button>
+        </div>
+
+        <!-- Result Cards -->
+        <div id="resultsContainer"></div>
+
+        <!-- Streak Reversion Tracker -->
+        <div class="streak-section">
+            <div class="streak-title">Streak Reversion Tracker (Observational)</div>
+            <div class="streak-note">⚠️ For analysis only. Streaks do not change RNG odds. Do not use for trading decisions.</div>
+            <div class="streak-grid" id="streakContainer"></div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <div class="disclaimer-title">⚠️ Important Disclaimer</div>
+            <p>Ndebe Trade Pro is an <strong>analytical tool only</strong>. It provides statistical observations of Deriv's synthetic indices but does NOT:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Predict future price movements</li>
+                <li>Guarantee profitable trades</li>
+                <li>Connect to your trading account</li>
+                <li>Place or execute trades</li>
+            </ul>
+            <p style="margin-top: 10px;">All analyses are based on historical data distributions. RNG outcomes are independent events. Use at your own risk.</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================================
+        // CONFIGURATION & STATE
+        // ============================================================================
+
+        const MARKETS = {
+            volatility: [
+                { symbol: 'R_10', decimals: 3 },
+                { symbol: 'R_25', decimals: 3 },
+                { symbol: 'R_50', decimals: 4 },
+                { symbol: 'R_75', decimals: 4 },
+                { symbol: 'R_100', decimals: 2 }
+            ],
+            oneSecVol: [
+                { symbol: '1HZ10V', decimals: 2 },
+                { symbol: '1HZ25V', decimals: 2 },
+                { symbol: '1HZ50V', decimals: 2 },
+                { symbol: '1HZ75V', decimals: 2 },
+                { symbol: '1HZ100V', decimals: 2 }
+            ],
+            jumpIndices: [
+                { symbol: 'JD10', decimals: 2 },
+                { symbol: 'JD25', decimals: 2 }
+            ]
+        };
+
+        const ALL_MARKETS = [
+            ...MARKETS.volatility,
+            ...MARKETS.oneSecVol,
+            ...MARKETS.jumpIndices
+        ];
+
+        const WS_URL = 'wss://ws.derivws.com/websockets/v3?app_id=1089';
+        const PING_INTERVAL = 30000; // 30 seconds
+
+        let ws = null;
+        let reconnectAttempts = 0;
+        const MAX_RECONNECT_ATTEMPTS = 5;
+
+        let marketData = {};
+        let streakData = {};
+        let scanProgress = { reached30: 0, reached200: 0 };
+
+        // Initialize market data structure
+        ALL_MARKETS.forEach(market => {
+            marketData[market.symbol] = {
+                symbol: market.symbol,
+                decimals: market.decimals,
+                ticks: [],
+                digits: new Map(),
+                currentPrice: null,
+                lastDigit: null
+            };
+            streakData[market.symbol] = {
+                threeUnder4: 0,
+                nextOver: 0,
+                threeOver5: 0,
+                nextUnder: 0
+            };
+        });
+
+        // ============================================================================
+        // UTILITY FUNCTIONS
+        // ============================================================================
+
+        function getLastDigit(price, decimals) {
+            const priceStr = price.toFixed(decimals);
+            return parseInt(priceStr.slice(-1), 10);
+        }
+
+        function initializeDigitMap() {
+            const map = new Map();
+            for (let i = 0; i < 10; i++) {
+                map.set(i, 0);
+            }
+            return map;
+        }
+
+        function calculateChiSquare(digitMap, sampleSize) {
+            const expected = sampleSize / 10;
+            let chiSquare = 0;
+            for (let i = 0; i < 10; i++) {
+                const observed = digitMap.get(i) || 0;
+                const diff = observed - expected;
+                chiSquare += (diff * diff) / expected;
+            }
+            return chiSquare;
+        }
+
+        function calculateRunsTest(digits) {
+            if (digits.length < 2) return 0;
+            let runs = 1;
+            for (let i = 1; i < digits.length; i++) {
+                if ((digits[i] < 5 && digits[i - 1] >= 5) ||
+                    (digits[i] >= 5 && digits[i - 1] < 5)) {
+                    runs++;
+                }
+            }
+            const n1 = digits.filter(d => d < 5).length;
+            const n2 = digits.filter(d => d >= 5).length;
+            const meanRuns = (2 * n1 * n2) / (n1 + n2) + 1;
+            const varRuns = (2 * n1 * n2 * (2 * n1 * n2 - n1 - n2)) /
+                           ((n1 + n2) * (n1 + n2) * (n1 + n2 - 1));
+            return (runs - meanRuns) / Math.sqrt(varRuns);
+        }
+
+        function calculateAutocorrelation(digits, lag) {
+            if (digits.length <= lag) return 0;
+            const mean = digits.reduce((a, b) => a + b, 0) / digits.length;
+            let numerator = 0;
+            let denominator = 0;
+            for (let i = 0; i < digits.length - lag; i++) {
+                numerator += (digits[i] - mean) * (digits[i + lag] - mean);
+            }
+            for (let i = 0; i < digits.length; i++) {
+                denominator += (digits[i] - mean) * (digits[i] - mean);
+            }
+            return denominator === 0 ? 0 : numerator / denominator;
+        }
+
+        function calculateShannonEntropy(digitMap, sampleSize) {
+            let entropy = 0;
+            for (let i = 0; i < 10; i++) {
+                const p = (digitMap.get(i) || 0) / sampleSize;
+                if (p > 0) {
+                    entropy -= p * Math.log2(p);
+                }
+            }
+            return entropy;
+        }
+
+        function getDataQuality(symbol) {
+            const market = marketData[symbol];
+            if (market.ticks.length === 0) return { status: 'clean', tests: [] };
+
+            const digits = market.ticks.slice(-200).map((t, i) => {
+                if (i === 0) return getLastDigit(t, market.decimals);
+                return getLastDigit(t, market.decimals);
+            });
+
+            const tests = [];
+            
+            // Runs test
+            const runsZ = calculateRunsTest(digits);
+            if (Math.abs(runsZ) > 1.96) {
+                tests.push('runs');
+            }
+
+            // Autocorrelation test
+            let maxAutocor = 0;
+            for (let lag = 1; lag <= 5; lag++) {
+                const ac = calculateAutocorrelation(digits, lag);
+                if (Math.abs(ac) > 0.15) {
+                    maxAutocor = Math.max(maxAutocor, Math.abs(ac));
+                }
+            }
+            if (maxAutocor > 0.15) {
+                tests.push('autocorr');
+            }
+
+            // Shannon entropy
+            const entropy = calculateShannonEntropy(market.digits, digits.length);
+            const maxEntropy = Math.log2(10); // 3.32 bits
+            if (entropy < maxEntropy * 0.9) {
+                tests.push('entropy');
+            }
+
+            let status = 'clean';
+            if (tests.includes('runs')) {
+                status = 'clustering';
+            } else if (tests.length > 0) {
+                status = 'caution';
+            }
+
+            return { status, tests };
+        }
+
+        function getQualityBadgeHTML(status) {
+            const badges = {
+                clean: '<span class="quality-badge clean">🟢 Clean</span>',
+                caution: '<span class="quality-badge caution">🟡 Caution</span>',
+                clustering: '<span class="quality-badge clustering">🔴 Clustering</span>'
+            };
+            return badges[status] || badges.clean;
+        }
+
+        // ============================================================================
+        // WEBSOCKET CONNECTION
+        // ============================================================================
+
+        function connectWebSocket() {
+            try {
+                ws = new WebSocket(WS_URL);
+
+                ws.onopen = () => {
+                    console.log('WebSocket connected');
+                    updateConnectionStatus('Connected', 'connected');
+                    reconnectAttempts = 0;
+                    requestTicksHistory();
+                };
+
+                ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    handleWebSocketMessage(data);
+                };
+
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    updateConnectionStatus('Error', 'disconnected');
+                };
+
+                ws.onclose = () => {
+                    console.log('WebSocket closed');
+                    updateConnectionStatus('Disconnected', 'disconnected');
+                    attemptReconnect();
+                };
+            } catch (error) {
+                console.error('Failed to connect:', error);
+                updateConnectionStatus('Failed', 'disconnected');
+                attemptReconnect();
+            }
+        }
+
+        function attemptReconnect() {
+            if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+                reconnectAttempts++;
+                const delay = Math.min(1000 * Math.pow(2, reconnectAttempts - 1), 30000);
+                updateConnectionStatus(`Reconnecting... (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})`, 'connecting');
+                setTimeout(connectWebSocket, delay);
+            } else {
+                updateConnectionStatus('Max retries reached', 'disconnected');
+            }
+        }
+
+        function updateConnectionStatus(text, status) {
+            const statusEl = document.getElementById('connectionStatus');
+            const indicator = document.querySelector('.status-indicator');
+            if (statusEl) statusEl.textContent = text;
+            if (indicator) {
+                indicator.className = `status-indicator ${status}`;
+            }
+        }
+
+        function sendMessage(msg) {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify(msg));
+            }
+        }
+
+        function requestTicksHistory() {
+            ALL_MARKETS.forEach(market => {
+                sendMessage({
+                    ticks_history: market.symbol,
+                    count: 200,
+                    end: 'latest',
+                    style: 'ticks'
+                });
+            });
+            setTimeout(() => subscribeToTicks(), 2000);
+        }
+
+        function subscribeToTicks() {
+            ALL_MARKETS.forEach(market => {
+                sendMessage({
+                    ticks: market.symbol
+                });
+            });
+            setupPingInterval();
+        }
+
+        function setupPingInterval() {
+            setInterval(() => {
+                sendMessage({ ping: 1 });
+            }, PING_INTERVAL);
+        }
+
+        // ============================================================================
+        // WEBSOCKET MESSAGE HANDLER
+        // ============================================================================
+
+        function handleWebSocketMessage(data) {
+            if (data.ticks_history) {
+                handleTicksHistory(data);
+            } else if (data.tick) {
+                handleTick(data);
+            } else if (data.error) {
+                console.error('WebSocket error:', data.error);
+            }
+        }
+
+        function handleTicksHistory(data) {
+            const symbol = data.echo_req.ticks_history;
+            if (!marketData[symbol]) return;
+
+            const ticks = data.ticks || [];
+            marketData[symbol].ticks = [];
+            marketData[symbol].digits = initializeDigitMap();
+
+            ticks.forEach(tick => {
+                marketData[symbol].ticks.push(tick.quote);
+                const digit = getLastDigit(tick.quote, marketData[symbol].decimals);
+                marketData[symbol].digits.set(digit, (marketData[symbol].digits.get(digit) || 0) + 1);
+            });
+
+            const reached30 = ALL_MARKETS.filter(m => marketData[m.symbol].ticks.length >= 30).length;
+            const reached200 = ALL_MARKETS.filter(m => marketData[m.symbol].ticks.length >= 200).length;
+            
+            scanProgress.reached30 = reached30;
+            scanProgress.reached200 = reached200;
+
+            updateProgress();
+            updateCurrentMarketDisplay();
+
+            if (reached30 === ALL_MARKETS.length) {
+                document.getElementById('matchesButton').disabled = false;
+                document.getElementById('differsButton').disabled = false;
+                document.getElementById('overUnderButton').disabled = false;
+            }
+        }
+
+        function handleTick(data) {
+            const symbol = data.tick.symbol;
+            if (!marketData[symbol]) return;
+
+            const price = data.tick.quote;
+            marketData[symbol].ticks.push(price);
+            marketData[symbol].currentPrice = price;
+
+            const digit = getLastDigit(price, marketData[symbol].decimals);
+            marketData[symbol].lastDigit = digit;
+            marketData[symbol].digits.set(digit, (marketData[symbol].digits.get(digit) || 0) + 1);
+
+            // Keep only last 200 ticks
+            if (marketData[symbol].ticks.length > 200) {
+                marketData[symbol].ticks.shift();
+            }
+
+            updateCurrentMarketDisplay();
+        }
+
+        // ============================================================================
+        // UI UPDATE FUNCTIONS
+        // ============================================================================
+
+        function updateCurrentMarketDisplay() {
+            const selectedSymbol = document.getElementById('marketSelect').value;
+            const market = marketData[selectedSymbol];
+
+            if (market.currentPrice !== null) {
+                document.getElementById('currentPrice').textContent = 
+                    market.currentPrice.toFixed(market.decimals);
+                document.getElementById('marketLabel').textContent = selectedSymbol;
+            }
+
+            updateTickFeed(selectedSymbol);
+            updateChart(selectedSymbol);
+        }
+
+        function updateTickFeed(symbol) {
+            const market = marketData[symbol];
+            const feed = document.getElementById('tickFeed');
+            feed.innerHTML = '';
+
+            const recentTicks = market.ticks.slice(-10);
+            recentTicks.forEach((tick, idx) => {
+                const digit = getLastDigit(tick, market.decimals);
+                const prevTick = idx > 0 ? recentTicks[idx - 1] : tick;
+                const direction = tick > prevTick ? 'up' : tick < prevTick ? 'down' : '';
+                
+                const chip = document.createElement('div');
+                chip.className = `tick-chip ${direction}`;
+                chip.textContent = digit;
+                feed.appendChild(chip);
+            });
+        }
+
+        function updateChart(symbol) {
+            const market = marketData[symbol];
+            const container = document.getElementById('chartContainer');
+            container.innerHTML = '';
+
+            const maxCount = Math.max(...Array.from(market.digits.values()), 1);
+
+            for (let i = 0; i < 10; i++) {
+                const count = market.digits.get(i) || 0;
+                const percentage = market.ticks.length > 0 
+                    ? ((count / market.ticks.length) * 100).toFixed(1)
+                    : 0;
+                const height = market.ticks.length > 0 
+                    ? (count / maxCount) * 100
+                    : 0;
+
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = `${height}%`;
+                bar.innerHTML = `
+                    <div class="bar-value">${percentage}%</div>
+                    <div class="bar-label">${i}</div>
+                `;
+                container.appendChild(bar);
+            }
+
+            // Update stats
+            const chiSquare = calculateChiSquare(market.digits, market.ticks.length);
+            const isSignificant = chiSquare > 16.92;
+            
+            document.getElementById('chiSquareValue').textContent = chiSquare.toFixed(2);
+            document.getElementById('dataPointsValue').textContent = market.ticks.length;
+            document.getElementById('significantValue').textContent = isSignificant ? 'Yes' : 'No';
+        }
+
+        function updateProgress() {
+            const total = ALL_MARKETS.length;
+            const fill30 = (scanProgress.reached30 / total) * 100;
+            const fill200 = (scanProgress.reached200 / total) * 100;
+
+            document.getElementById('progress30').style.width = `${fill30}%`;
+            document.getElementById('progress200').style.width = `${fill200}%`;
+            document.getElementById('progress30Text').textContent = 
+                `${scanProgress.reached30}/${total}`;
+            document.getElementById('progress200Text').textContent = 
+                `${scanProgress.reached200}/${total}`;
+        }
+
+        // ============================================================================
+        // ANALYSIS ENGINES
+        // ============================================================================
+
+        function runMatchesAnalysis() {
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.innerHTML = '';
+
+            ALL_MARKETS.forEach(market => {
+                const marketData_item = marketData[market.symbol];
+                if (marketData_item.ticks.length < 30) return;
+
+                const digitFreqs = Array.from(marketData_item.digits.values());
+                const maxFreq = Math.max(...digitFreqs);
+                const matchDigit = Array.from(marketData_item.digits.entries())
+                    .find(([_, freq]) => freq === maxFreq)[0];
+
+                const percentage = (maxFreq / marketData_item.ticks.length) * 100;
+                const chiSquare = calculateChiSquare(marketData_item.digits, marketData_item.ticks.length);
+                const quality = getDataQuality(market.symbol);
+
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-header">
+                        <div class="result-market">${market.symbol}</div>
+                        ${getQualityBadgeHTML(quality.status)}
+                    </div>
+                    <div class="result-body">
+                        <div class="result-item">
+                            <div class="result-item-label">Predicted Digit</div>
+                            <div class="result-item-value">${matchDigit}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-item-label">Observed %</div>
+                            <div class="result-item-value">${percentage.toFixed(1)}%</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-item-label">Chi-Square</div>
+                            <div class="result-item-value">${chiSquare.toFixed(2)}</div>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        function runDiffersAnalysis() {
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.innerHTML = '';
+
+            ALL_MARKETS.forEach(market => {
+                const marketData_item = marketData[market.symbol];
+                if (marketData_item.ticks.length < 30) return;
+
+                const targetFreq = marketData_item.ticks.length / 10;
+                let closestDigit = 0;
+                let closestDiff = Math.abs((marketData_item.digits.get(0) || 0) - targetFreq);
+
+                for (let i = 1; i < 10; i++) {
+                    const diff = Math.abs((marketData_item.digits.get(i) || 0) - targetFreq);
+                    if (diff < closestDiff) {
+                        closestDiff = diff;
+                        closestDigit = i;
+                    }
+                }
+
+                const percentage = ((marketData_item.digits.get(closestDigit) || 0) / marketData_item.ticks.length) * 100;
+                const chiSquare = calculateChiSquare(marketData_item.digits, marketData_item.ticks.length);
+                const quality = getDataQuality(market.symbol);
+
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-header">
+                        <div class="result-market">${market.symbol}</div>
+                        ${getQualityBadgeHTML(quality.status)}
+                    </div>
+                    <div class="result-body">
+                        <div class="result-item">
+                            <div class="result-item-label">Balanced Digit</div>
+                            <div class="result-item-value differs">${closestDigit}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-item-label">Observed %</div>
+                            <div class="result-item-value differs">${percentage.toFixed(1)}%</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-item-label">Chi-Square</div>
+                            <div class="result-item-value differs">${chiSquare.toFixed(2)}</div>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        function runOverUnderAnalysis() {
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.innerHTML = '';
+
+            ALL_MARKETS.forEach(market => {
+                const marketData_item = marketData[market.symbol];
+                if (marketData_item.ticks.length < 30) return;
+
+                const digits = marketData_item.ticks.map(t => 
+                    getLastDigit(t, marketData_item.decimals)
+                );
+
+                const barriers = [2, 3, 4, 5, 6, 7];
+                let bestBarrier = null;
+                let bestZScore = 0;
+                let bestConfidence = 'Weak';
+
+                barriers.forEach(barrier => {
+                    const over = digits.filter(d => d > barrier).length;
+                    const under = digits.filter(d => d <= barrier).length;
+                    const p = 0.5;
+                    const n = digits.length;
+                    const mean = n * p;
+                    const variance = n * p * (1 - p);
+                    const zScore = Math.abs((over - mean) / Math.sqrt(variance));
+
+                    if (zScore > bestZScore) {
+                        bestZScore = zScore;
+                        bestBarrier = barrier;
+
+                        if (zScore > 2.33) {
+                            bestConfidence = 'Very Strong';
+                        } else if (zScore > 1.645) {
+                            bestConfidence = 'Strong';
+                        } else if (zScore > 1.28) {
+                            bestConfidence = 'Moderate';
+                        } else {
+                            bestConfidence = 'Weak';
+                        }
+                    }
+                });
+
+                const quality = getDataQuality(market.symbol);
+
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-header">
+                        <div class="result-market">${market.symbol}</div>
+                        ${getQualityBadgeHTML(quality.status)}
+                    </div>
+                    <div class="result-body">
+                        <div class="result-item">
+                            <div class="result-item-label">Barrier</div>
+                            <div class="result-item-value over-under">${bestBarrier}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-item-label">Z-Score</div>
+                            <div class="result-item-value over-under">${bestZScore.toFixed(3)}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-item-label">Confidence</div>
+                            <div class="result-item-value over-under">${bestConfidence}</div>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        function updateStreakTracker() {
+            const container = document.getElementById('streakContainer');
+            container.innerHTML = '';
+
+            let aggThreeUnder4 = 0, aggNextOver = 0, aggThreeOver5 = 0, aggNextUnder = 0;
+
+            ALL_MARKETS.forEach(market => {
+                const marketData_item = marketData[market.symbol];
+                const digits = marketData_item.ticks.map(t => 
+                    getLastDigit(t, marketData_item.decimals)
+                );
+
+                let underStreak = 0, overStreak = 0;
+                let threeUnder4Count = 0, nextOverCount = 0;
+                let threeOver5Count = 0, nextUnderCount = 0;
+
+                for (let i = 0; i < digits.length; i++) {
+                    const d = digits[i];
+                    if (d < 4) {
+                        underStreak++;
+                        overStreak = 0;
+                    } else if (d > 5) {
+                        overStreak++;
+                        underStreak = 0;
+                    } else {
+                        underStreak = 0;
+                        overStreak = 0;
+                    }
+
+                    if (underStreak === 3 && i < digits.length - 1) {
+                        threeUnder4Count++;
+                        if (digits[i + 1] > 5) nextOverCount++;
+                    }
+                    if (overStreak === 3 && i < digits.length - 1) {
+                        threeOver5Count++;
+                        if (digits[i + 1] < 4) nextUnderCount++;
+                    }
+                }
+
+                streakData[market.symbol] = {
+                    threeUnder4: threeUnder4Count,
+                    nextOver: nextOverCount,
+                    threeOver5: threeOver5Count,
+                    nextUnder: nextUnderCount
+                };
+
+                aggThreeUnder4 += threeUnder4Count;
+                aggNextOver += nextOverCount;
+                aggThreeOver5 += threeOver5Count;
+                aggNextUnder += nextUnderCount;
+            });
+
+            // Aggregate card
+            const aggCard = document.createElement('div');
+            aggCard.className = 'streak-item';
+            aggCard.innerHTML = `
+                <div class="streak-item-title">Aggregate Stats</div>
+                <div class="streak-stat">
+                    <span class="streak-stat-label">3 Under 4 → Next Over</span>
+                    <span class="streak-stat-value">${aggNextOver} / ${aggThreeUnder4} (${aggThreeUnder4 > 0 ? (aggNextOver / aggThreeUnder4 * 100).toFixed(1) : 0}%)</span>
+                </div>
+                <div class="streak-stat">
+                    <span class="streak-stat-label">3 Over 5 → Next Under</span>
+                    <span class="streak-stat-value">${aggNextUnder} / ${aggThreeOver5} (${aggThreeOver5 > 0 ? (aggNextUnder / aggThreeOver5 * 100).toFixed(1) : 0}%)</span>
+                </div>
+            `;
+            container.appendChild(aggCard);
+
+            // Per-market cards
+            ALL_MARKETS.forEach(market => {
+                const stats = streakData[market.symbol];
+                const card = document.createElement('div');
+                card.className = 'streak-item';
+                card.innerHTML = `
+                    <div class="streak-item-title">${market.symbol}</div>
+                    <div class="streak-stat">
+                        <span class="streak-stat-label">3U4 → O</span>
+                        <span class="streak-stat-value">${stats.nextOver} / ${stats.threeUnder4} (${stats.threeUnder4 > 0 ? (stats.nextOver / stats.threeUnder4 * 100).toFixed(1) : 0}%)</span>
+                    </div>
+                    <div class="streak-stat">
+                        <span class="streak-stat-label">3O5 → U</span>
+                        <span class="streak-stat-value">${stats.nextUnder} / ${stats.threeOver5} (${stats.threeOver5 > 0 ? (stats.nextUnder / stats.threeOver5 * 100).toFixed(1) : 0}%)</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // ============================================================================
+        // EVENT LISTENERS
+        // ============================================================================
+
+        document.getElementById('marketSelect').addEventListener('change', updateCurrentMarketDisplay);
+
+        document.getElementById('scanAllButton').addEventListener('click', () => {
+            scanProgress = { reached30: 0, reached200: 0 };
+            ALL_MARKETS.forEach(market => {
+                marketData[market.symbol].ticks = [];
+                marketData[market.symbol].digits = initializeDigitMap();
+            });
+            document.getElementById('matchesButton').disabled = true;
+            document.getElementById('differsButton').disabled = true;
+            document.getElementById('overUnderButton').disabled = true;
+            updateProgress();
+            requestTicksHistory();
+        });
+
+        document.getElementById('matchesButton').addEventListener('click', runMatchesAnalysis);
+        document.getElementById('differsButton').addEventListener('click', runDiffersAnalysis);
+        document.getElementById('overUnderButton').addEventListener('click', runOverUnderAnalysis);
+
+        // Update streak tracker every 5 seconds
+        setInterval(updateStreakTracker, 5000);
+
+        // ============================================================================
+        // INITIALIZATION
+        // ============================================================================
+
+        connectWebSocket();
+        updateStreakTracker();
+    </script>
+</body>
+</html>
