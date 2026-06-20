@@ -6,9 +6,7 @@
     <title>NDEBE Analysis Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <style>
-        /* ===== RESET & BASE ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         html, body {
             min-height: 100vh;
             background: linear-gradient(135deg, #0a0612 0%, #16082a 100%);
@@ -17,596 +15,146 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        
-        body {
-            padding: 24px 16px 60px;
-        }
+        body { padding: 24px 16px 60px; }
 
-        /* ===== PREMIUM GLOW BACKDROP ===== */
-        .glow-backdrop {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
+        .glow-backdrop { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .glow-orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.15; }
+        .orb-1 { width: 600px; height: 600px; top: -200px; left: -150px; background: radial-gradient(circle, #7c3aed, #a855f7); animation: float 20s ease-in-out infinite; }
+        .orb-2 { width: 500px; height: 500px; bottom: -100px; right: -100px; background: radial-gradient(circle, #06f 0%, #a855f7 100%); animation: float-delay 24s ease-in-out infinite; }
+        .orb-3 { width: 400px; height: 400px; top: 40%; left: 50%; background: radial-gradient(circle, #00d9ff 0%, #7c3aed 100%); opacity: 0.08; animation: float-slow 30s ease-in-out infinite; }
+        @keyframes float { 0%,100% { transform: translate(0,0) scale(1);} 33% { transform: translate(50px,-40px) scale(1.1);} 66% { transform: translate(-30px,60px) scale(0.95);} }
+        @keyframes float-delay { 0%,100% { transform: translate(0,0) scale(1);} 33% { transform: translate(-40px,50px) scale(0.9);} 66% { transform: translate(60px,-30px) scale(1.05);} }
+        @keyframes float-slow { 0%,100% { transform: translate(0,0);} 50% { transform: translate(30px,30px);} }
 
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
-        }
-
-        .orb-1 {
-            width: 600px; height: 600px;
-            top: -200px; left: -150px;
-            background: radial-gradient(circle, #7c3aed, #a855f7);
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-2 {
-            width: 500px; height: 500px;
-            bottom: -100px; right: -100px;
-            background: radial-gradient(circle, #06f 0%, #a855f7 100%);
-            animation: float-delay 24s ease-in-out infinite;
-        }
-
-        .orb-3 {
-            width: 400px; height: 400px;
-            top: 40%; left: 50%;
-            background: radial-gradient(circle, #00d9ff 0%, #7c3aed 100%);
-            opacity: 0.08;
-            animation: float-slow 30s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(50px, -40px) scale(1.1); }
-            66% { transform: translate(-30px, 60px) scale(0.95); }
-        }
-
-        @keyframes float-delay {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-40px, 50px) scale(0.9); }
-            66% { transform: translate(60px, -30px) scale(1.05); }
-        }
-
-        @keyframes float-slow {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, 30px); }
-        }
-
-        /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(147, 51, 234, 0.1); }
-        ::-webkit-scrollbar-thumb { 
-            background: linear-gradient(180deg, #9333ea, #7c3aed);
-            border-radius: 3px;
-        }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #9333ea, #7c3aed); border-radius: 3px; }
 
-        /* ===== CONTAINER ===== */
-        .app-container {
-            position: relative;
-            z-index: 1;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+        .app-container { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; }
 
-        /* ===== HEADER ===== */
-        .app-header {
-            text-align: center;
-            padding: 30px 0 40px;
-            position: relative;
-            z-index: 2;
-        }
-
+        .app-header { text-align: center; padding: 30px 0 40px; position: relative; z-index: 2; }
         .app-header h1 {
-            font-family: 'Orbitron', monospace;
-            font-weight: 900;
-            font-size: 2.8rem;
+            font-family: 'Orbitron', monospace; font-weight: 900; font-size: 2.8rem;
             background: linear-gradient(135deg, #06f, #a855f7, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 3px;
-            text-shadow: 0 0 60px rgba(147, 51, 234, 0.3);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            letter-spacing: 3px; text-shadow: 0 0 60px rgba(147, 51, 234, 0.3);
             animation: glow-pulse 3s ease-in-out infinite;
         }
+        @keyframes glow-pulse { 0%,100% { filter: drop-shadow(0 0 20px rgba(147,51,234,0.3)); } 50% { filter: drop-shadow(0 0 40px rgba(147,51,234,0.6)); } }
+        .app-header .subtitle { font-size: 0.85rem; color: #a78bfa; margin-top: 8px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
 
-        @keyframes glow-pulse {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.3)); }
-            50% { filter: drop-shadow(0 0 40px rgba(147, 51, 234, 0.6)); }
-        }
+        .status-bar { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; font-size: 0.75rem; color: #a78bfa; font-family: 'Space Mono', monospace; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff1493; box-shadow: 0 0 8px #ff1493; animation: pulse 2s ease-in-out infinite; }
+        .status-dot.connected { background: #00ff88; box-shadow: 0 0 12px #00ff88; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        .app-header .subtitle {
-            font-size: 0.85rem;
-            color: #a78bfa;
-            margin-top: 8px;
-            font-weight: 300;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
+        .content-area { position: relative; z-index: 2; }
 
-        /* ===== STATUS INDICATOR ===== */
-        .status-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 16px;
-            font-size: 0.75rem;
-            color: #a78bfa;
-            font-family: 'Space Mono', monospace;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ff1493;
-            box-shadow: 0 0 8px #ff1493;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .status-dot.connected {
-            background: #00ff88;
-            box-shadow: 0 0 12px #00ff88;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* ===== MAIN CONTENT AREA ===== */
-        .content-area {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* ===== SCAN BUTTON ===== */
-        .scan-button-container {
-            display: flex;
-            justify-content: center;
-            margin: 40px 0;
-        }
-
+        .scan-button-container { display: flex; justify-content: center; margin: 40px 0; }
         .scan-btn {
-            padding: 18px 48px;
-            font-family: 'Orbitron', monospace;
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            border: 2px solid transparent;
-            border-radius: 16px;
-            background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(168, 85, 247, 0.1)) border-box;
-            color: #f0ecf8;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            box-shadow: 0 0 40px rgba(147, 51, 234, 0.2);
-            overflow: hidden;
+            padding: 18px 48px; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 1.1rem; letter-spacing: 2px;
+            border: 2px solid transparent; border-radius: 16px;
+            background: linear-gradient(135deg, rgba(147,51,234,0.2), rgba(168,85,247,0.1)) border-box;
+            color: #f0ecf8; cursor: pointer; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative; box-shadow: 0 0 40px rgba(147,51,234,0.2); overflow: hidden;
         }
-
         .scan-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 16px;
-            padding: 2px;
+            content: ''; position: absolute; inset: 0; border-radius: 16px; padding: 2px;
             background: linear-gradient(135deg, #9333ea, #a855f7, #ec4899);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.4s;
+            -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.4s;
         }
+        .scan-btn:hover::before { opacity: 1; }
+        .scan-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 0 60px rgba(147,51,234,0.4); }
+        .scan-btn:active { transform: scale(0.98); }
+        .scan-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .scan-btn.scanning { animation: button-glow 0.6s ease-in-out infinite; }
+        @keyframes button-glow { 0%,100% { box-shadow: 0 0 40px rgba(147,51,234,0.3); } 50% { box-shadow: 0 0 80px rgba(147,51,234,0.6); } }
 
-        .scan-btn:hover::before {
-            opacity: 1;
-        }
+        .progress-container { display: none; margin: 30px 0; padding: 24px; background: rgba(26,18,40,0.5); border: 1px solid rgba(147,51,234,0.2); border-radius: 16px; backdrop-filter: blur(20px); }
+        .progress-container.active { display: block; }
+        .progress-title { font-family: 'Orbitron', monospace; font-size: 0.8rem; letter-spacing: 2px; color: #a78bfa; text-transform: uppercase; margin-bottom: 16px; }
+        .markets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 12px; }
+        .market-chip { padding: 12px 16px; background: rgba(147,51,234,0.1); border: 1px solid rgba(147,51,234,0.3); border-radius: 12px; text-align: center; transition: all 0.3s; cursor: default; }
+        .market-chip.complete { background: rgba(0,255,136,0.1); border-color: rgba(0,255,136,0.5); box-shadow: 0 0 20px rgba(0,255,136,0.2); }
+        .market-chip-name { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: #f0ecf8; font-weight: 600; margin-bottom: 4px; }
+        .market-chip-count { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: #a78bfa; }
+        .market-chip.complete .market-chip-count { color: #00ff88; }
 
-        .scan-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 0 60px rgba(147, 51, 234, 0.4);
-        }
-
-        .scan-btn:active {
-            transform: scale(0.98);
-        }
-
-        .scan-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .scan-btn.scanning {
-            animation: button-glow 0.6s ease-in-out infinite;
-        }
-
-        @keyframes button-glow {
-            0%, 100% { box-shadow: 0 0 40px rgba(147, 51, 234, 0.3); }
-            50% { box-shadow: 0 0 80px rgba(147, 51, 234, 0.6); }
-        }
-
-        /* ===== PROGRESS DISPLAY ===== */
-        .progress-container {
-            display: none;
-            margin: 30px 0;
-            padding: 24px;
-            background: rgba(26, 18, 40, 0.5);
-            border: 1px solid rgba(147, 51, 234, 0.2);
-            border-radius: 16px;
-            backdrop-filter: blur(20px);
-        }
-
-        .progress-container.active {
-            display: block;
-        }
-
-        .progress-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            color: #a78bfa;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        .markets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-        }
-
-        .market-chip {
-            padding: 12px 16px;
-            background: rgba(147, 51, 234, 0.1);
-            border: 1px solid rgba(147, 51, 234, 0.3);
-            border-radius: 12px;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: default;
-        }
-
-        .market-chip.complete {
-            background: rgba(0, 255, 136, 0.1);
-            border-color: rgba(0, 255, 136, 0.5);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
-        }
-
-        .market-chip-name {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            color: #f0ecf8;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .market-chip-count {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            color: #a78bfa;
-        }
-
-        .market-chip.complete .market-chip-count {
-            color: #00ff88;
-        }
-
-        /* ===== PREDICTION BUTTONS ===== */
-        .prediction-buttons {
-            display: none;
-            gap: 16px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .prediction-buttons.active {
-            display: flex;
-        }
-
+        .prediction-buttons { display: none; gap: 16px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
+        .prediction-buttons.active { display: flex; }
         .pred-btn {
-            flex: 1;
-            min-width: 150px;
-            padding: 16px 24px;
-            font-family: 'Orbitron', monospace;
-            font-weight: 700;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-            border: 2px solid transparent;
-            border-radius: 14px;
-            background: linear-gradient(135deg, rgba(100, 200, 255, 0.15), rgba(100, 200, 255, 0.05));
-            color: #64c8ff;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            box-shadow: 0 0 30px rgba(100, 200, 255, 0.15);
-            text-transform: uppercase;
+            flex: 1; min-width: 150px; padding: 16px 24px; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.95rem; letter-spacing: 1px;
+            border: 2px solid transparent; border-radius: 14px;
+            background: linear-gradient(135deg, rgba(100,200,255,0.15), rgba(100,200,255,0.05));
+            color: #64c8ff; cursor: pointer; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative; box-shadow: 0 0 30px rgba(100,200,255,0.15); text-transform: uppercase;
         }
+        .pred-btn.matches { background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05)); color: #00ff88; box-shadow: 0 0 30px rgba(0,255,136,0.15); }
+        .pred-btn.differs { background: linear-gradient(135deg, rgba(255,51,102,0.15), rgba(255,51,102,0.05)); color: #ff3366; box-shadow: 0 0 30px rgba(255,51,102,0.15); }
+        .pred-btn.overunder { background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(236,72,153,0.05)); color: #ec4899; box-shadow: 0 0 30px rgba(236,72,153,0.15); }
+        .pred-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(147,51,234,0.3); filter: brightness(1.2); }
+        .pred-btn:active { transform: scale(0.98); }
 
-        .pred-btn.matches {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05));
-            color: #00ff88;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
-        }
+        .signal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(10,6,18,0.85); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease; }
+        .signal-overlay.active { display: flex; opacity: 1; }
 
-        .pred-btn.differs {
-            background: linear-gradient(135deg, rgba(255, 51, 102, 0.15), rgba(255, 51, 102, 0.05));
-            color: #ff3366;
-            box-shadow: 0 0 30px rgba(255, 51, 102, 0.15);
-        }
-
-        .pred-btn.overunder {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(236, 72, 153, 0.05));
-            color: #ec4899;
-            box-shadow: 0 0 30px rgba(236, 72, 153, 0.15);
-        }
-
-        .pred-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 40px rgba(147, 51, 234, 0.3);
-            filter: brightness(1.2);
-        }
-
-        .pred-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* ===== SIGNAL OVERLAY ===== */
-        .signal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 1000;
-            background: rgba(10, 6, 18, 0.85);
-            backdrop-filter: blur(10px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .signal-overlay.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        /* ===== LOADING ANIMATION ===== */
-        .loading-animation {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            opacity: 1;
-            transition: opacity 0.6s ease;
-        }
-
-        .loading-animation.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .gears-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-            height: 120px;
-            margin-bottom: 30px;
-        }
-
-        .gear {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-        }
-
-        .gear svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        @keyframes gear-pop {
-            0% { 
-                opacity: 0;
-                transform: scale(0) rotateZ(-180deg);
-            }
-            60% {
-                opacity: 1;
-                transform: scale(1.1);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) rotateZ(0deg);
-            }
-        }
-
-        @keyframes gear-spin {
-            0% { transform: rotateZ(0deg); }
-            100% { transform: rotateZ(360deg); }
-        }
-
+        .loading-animation { position: absolute; display: flex; align-items: center; justify-content: center; flex-direction: column; opacity: 1; transition: opacity 0.6s ease; }
+        .loading-animation.fade-out { opacity: 0; pointer-events: none; }
+        .gears-container { display: flex; align-items: center; justify-content: center; gap: 30px; height: 120px; margin-bottom: 30px; }
+        .gear { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; opacity: 0; }
+        .gear svg { width: 100%; height: 100%; }
+        @keyframes gear-pop { 0% { opacity:0; transform: scale(0) rotateZ(-180deg);} 60% { opacity:1; transform: scale(1.1);} 100% { opacity:1; transform: scale(1) rotateZ(0deg);} }
+        @keyframes gear-spin { 0% { transform: rotateZ(0deg);} 100% { transform: rotateZ(360deg);} }
         .gear:nth-child(1) { animation: gear-pop 0.6s ease-out 0s forwards, gear-spin 4s linear 0.6s infinite; }
         .gear:nth-child(2) { animation: gear-pop 0.6s ease-out 0.15s forwards, gear-spin 4s linear 0.75s infinite reverse; }
         .gear:nth-child(3) { animation: gear-pop 0.6s ease-out 0.3s forwards, gear-spin 4s linear 0.9s infinite; }
         .gear:nth-child(4) { animation: gear-pop 0.6s ease-out 0.45s forwards, gear-spin 4s linear 1.05s infinite reverse; }
         .gear:nth-child(5) { animation: gear-pop 0.6s ease-out 0.6s forwards, gear-spin 4s linear 1.2s infinite; }
 
-        .loading-text {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: #a78bfa;
-            text-align: center;
-            margin-top: 20px;
-            text-transform: uppercase;
-        }
+        .loading-text { font-family: 'Orbitron', monospace; font-size: 1.2rem; letter-spacing: 2px; color: #a78bfa; text-align: center; margin-top: 20px; text-transform: uppercase; }
+        .scanning-markets-text { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: #7c3aed; margin-top: 8px; letter-spacing: 1px; }
 
-        .scanning-markets-text {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            color: #7c3aed;
-            margin-top: 8px;
-            letter-spacing: 1px;
-        }
-
-        /* ===== SIGNAL CARD (REVEALED) ===== */
         .signal-card {
-            position: absolute;
-            background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(168, 85, 247, 0.1));
-            border: 1px solid rgba(147, 51, 234, 0.4);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            width: 90%;
-            backdrop-filter: blur(30px);
-            box-shadow: 0 0 80px rgba(147, 51, 234, 0.3), 0 0 120px rgba(168, 85, 247, 0.2);
-            text-align: center;
-            opacity: 0;
-            transform: scale(0.5) rotateY(-90deg);
-            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            perspective: 1000px;
-            overflow-y: auto;
-            max-height: 80vh;
+            position: absolute; background: linear-gradient(135deg, rgba(147,51,234,0.2), rgba(168,85,247,0.1));
+            border: 1px solid rgba(147,51,234,0.4); border-radius: 20px; padding: 40px; max-width: 600px; width: 90%;
+            backdrop-filter: blur(30px); box-shadow: 0 0 80px rgba(147,51,234,0.3), 0 0 120px rgba(168,85,247,0.2);
+            text-align: center; opacity: 0; transform: scale(0.5) rotateY(-90deg);
+            transition: all 0.8s cubic-bezier(0.34,1.56,0.64,1); perspective: 1000px; overflow-y: auto; max-height: 80vh;
         }
-
-        .signal-card.reveal {
-            opacity: 1;
-            transform: scale(1) rotateY(0deg);
-        }
-
-        .signal-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            color: #a78bfa;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        .signal-digit {
-            font-family: 'Space Mono', monospace;
-            font-size: 4.5rem;
-            font-weight: 700;
-            margin: 20px 0;
-            text-shadow: 0 0 40px currentColor;
-            animation: digit-glow 2s ease-in-out infinite;
-        }
-
-        @keyframes digit-glow {
-            0%, 100% { filter: drop-shadow(0 0 10px currentColor); }
-            50% { filter: drop-shadow(0 0 30px currentColor); }
-        }
-
+        .signal-card.reveal { opacity: 1; transform: scale(1) rotateY(0deg); }
+        .signal-title { font-family: 'Orbitron', monospace; font-size: 0.8rem; letter-spacing: 2px; color: #a78bfa; text-transform: uppercase; margin-bottom: 16px; }
+        .signal-digit { font-family: 'Space Mono', monospace; font-size: 4.5rem; font-weight: 700; margin: 20px 0; text-shadow: 0 0 40px currentColor; animation: digit-glow 2s ease-in-out infinite; }
+        @keyframes digit-glow { 0%,100% { filter: drop-shadow(0 0 10px currentColor); } 50% { filter: drop-shadow(0 0 30px currentColor); } }
         .signal-digit.matches-color { color: #00ff88; }
         .signal-digit.differs-color { color: #ff3366; }
         .signal-digit.overunder-color { color: #ec4899; }
+        .signal-market { font-family: 'Space Mono', monospace; font-size: 0.85rem; color: #f0ecf8; font-weight: 600; margin-bottom: 20px; letter-spacing: 1px; }
+        .signal-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(147,51,234,0.2); }
+        .signal-stat { padding: 12px; background: rgba(147,51,234,0.08); border-radius: 10px; border: 1px solid rgba(147,51,234,0.2); }
+        .signal-stat-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: #a78bfa; letter-spacing: 1px; text-transform: uppercase; }
+        .signal-stat-value { font-family: 'Space Mono', monospace; font-size: 1.1rem; color: #f0ecf8; font-weight: 700; margin-top: 4px; }
+        .signal-badge { display: inline-block; margin-top: 16px; padding: 6px 14px; background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.4); border-radius: 20px; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: #00ff88; letter-spacing: 1px; }
+        .signal-badge.caution { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.4); color: #ffd700; }
+        .signal-badge.warning { background: rgba(255,51,102,0.15); border-color: rgba(255,51,102,0.4); color: #ff3366; }
+        .quality-checks { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(147,51,234,0.2); font-size: 0.75rem; text-align: left; color: #a78bfa; }
+        .quality-check-item { margin: 4px 0; font-family: 'Space Mono', monospace; }
 
-        .signal-market {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
-            color: #f0ecf8;
-            font-weight: 600;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-        }
-
-        .signal-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(147, 51, 234, 0.2);
-        }
-
-        .signal-stat {
-            padding: 12px;
-            background: rgba(147, 51, 234, 0.08);
-            border-radius: 10px;
-            border: 1px solid rgba(147, 51, 234, 0.2);
-        }
-
-        .signal-stat-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.65rem;
-            color: #a78bfa;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .signal-stat-value {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.1rem;
-            color: #f0ecf8;
-            font-weight: 700;
-            margin-top: 4px;
-        }
-
-        .signal-badge {
-            display: inline-block;
-            margin-top: 16px;
-            padding: 6px 14px;
-            background: rgba(0, 255, 136, 0.15);
-            border: 1px solid rgba(0, 255, 136, 0.4);
-            border-radius: 20px;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            color: #00ff88;
-            letter-spacing: 1px;
-        }
-
-        .signal-badge.caution {
-            background: rgba(255, 215, 0, 0.15);
-            border-color: rgba(255, 215, 0, 0.4);
-            color: #ffd700;
-        }
-
-        .signal-badge.warning {
-            background: rgba(255, 51, 102, 0.15);
-            border-color: rgba(255, 51, 102, 0.4);
-            color: #ff3366;
-        }
-
-        .quality-checks {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(147, 51, 234, 0.2);
-            font-size: 0.75rem;
-            text-align: left;
-            color: #a78bfa;
-        }
-
-        .quality-check-item {
-            margin: 4px 0;
-            font-family: 'Space Mono', monospace;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .app-header h1 { font-size: 2rem; }
-            .signal-digit { font-size: 3.5rem; }
-            .signal-card { padding: 30px; }
-            .markets-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
-        }
-
-        @media (max-width: 480px) {
-            body { padding: 16px 12px 40px; }
-            .app-header h1 { font-size: 1.6rem; }
-            .scan-btn { padding: 14px 32px; font-size: 0.9rem; }
-            .signal-digit { font-size: 2.8rem; }
-            .signal-card { padding: 20px; }
-            .markets-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+        @media (max-width: 768px) { .app-header h1 { font-size: 2rem; } .signal-digit { font-size: 3.5rem; } .signal-card { padding: 30px; } .markets-grid { grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); } }
+        @media (max-width: 480px) { body { padding: 16px 12px 40px; } .app-header h1 { font-size: 1.6rem; } .scan-btn { padding: 14px 32px; font-size: 0.9rem; } .signal-digit { font-size: 2.8rem; } .signal-card { padding: 20px; } .markets-grid { grid-template-columns: repeat(2,1fr); } }
     </style>
 </head>
 <body>
+
+<!-- ===== LOGIN GATE (shown until Deriv account connected) ===== -->
+<div id="loginGate" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0612;color:#fff;text-align:center;padding:24px;position:relative;z-index:10;">
+    <h1 style="font-family:'Orbitron',monospace;font-size:2rem;background:linear-gradient(135deg,#06f,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;">NDEBE</h1>
+    <p style="color:#a78bfa;margin:16px 0 32px;">Connect your Deriv account to unlock the full app</p>
+    <a id="derivLoginLink" href="#" style="background:linear-gradient(135deg,#9333ea,#a855f7);color:#fff;padding:16px 32px;border-radius:14px;text-decoration:none;font-family:'Orbitron',monospace;font-weight:700;letter-spacing:1px;box-shadow:0 0 40px rgba(147,51,234,0.4);">
+        LOG IN WITH DERIV
+    </a>
+    <p style="font-size:11px;color:#5a4d78;margin-top:24px;max-width:320px;">You'll be redirected to Deriv's own login page. Ndebe never sees or stores your password.</p>
+</div>
 
 <!-- ===== GLOW BACKDROP ===== -->
 <div class="glow-backdrop">
@@ -632,9 +180,8 @@
     </div>
 </div>
 
-<!-- ===== MAIN APP ===== -->
-<div class="app-container">
-    <!-- HEADER -->
+<!-- ===== MAIN APP (hidden until login) ===== -->
+<div class="app-container" id="appContent" style="display:none;">
     <header class="app-header">
         <h1>NDEBE</h1>
         <div class="subtitle">Statistical Engine Suite</div>
@@ -644,20 +191,16 @@
         </div>
     </header>
 
-    <!-- CONTENT -->
     <div class="content-area">
-        <!-- SCAN BUTTON -->
         <div class="scan-button-container">
             <button class="scan-btn" id="scanBtn">⟳ SCAN ALL MARKETS</button>
         </div>
 
-        <!-- PROGRESS DISPLAY -->
         <div class="progress-container" id="progressContainer">
             <div class="progress-title">🔄 Gathering 30 Ticks (Into 200-Tick Buffer)</div>
             <div class="markets-grid" id="marketsGrid"></div>
         </div>
 
-        <!-- PREDICTION BUTTONS -->
         <div class="prediction-buttons" id="predictionButtons">
             <button class="pred-btn matches" id="matchesBtn">🎯 MATCHES</button>
             <button class="pred-btn differs" id="differsBtn">⚡ DIFFERS</button>
@@ -666,10 +209,9 @@
     </div>
 </div>
 
-<!-- ===== JAVASCRIPT - PURE ENGINE IMPLEMENTATION ===== -->
 <script>
 // ============================================================
-// NDEBE STATISTICAL ENGINE - CORE LOGIC ONLY
+// NDEBE STATISTICAL ENGINE + DERIV OAUTH ACCOUNT CONNECTION
 // ============================================================
 
 // ===== CONFIG =====
@@ -681,7 +223,13 @@ const DECIMALS = {
 };
 const BUFFER_SIZE = 200;
 const EARLY_READ_SIZE = 30;
-const WS_URL = 'wss://ws.derivws.com/websockets/v3?app_id=1089';
+const WS_URL = 'wss://ws.derivws.com/websockets/v3?app_id=1089'; // market data — public, unchanged
+
+// ===== ACCOUNT OAUTH CONFIG =====
+const APP_ID = '33B44tAtovshdIedmNunD'; // Ndebe — registered Deriv app_id
+let derivAccounts = [];
+let activeAccount = null;
+let derivAccountWs = null;
 
 // ===== STATE =====
 let ws = null;
@@ -704,59 +252,40 @@ const gearsContainer = document.getElementById('gearsContainer');
 const statusDot = document.getElementById('statusDot');
 const statusText = document.getElementById('statusText');
 
-// ===== UTILITY: EXTRACT LAST DIGIT =====
+// ===== UTILITY =====
 function getLastDigit(price, decimals) {
     const priceStr = price.toFixed(decimals);
     return parseInt(priceStr.slice(-1), 10);
 }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function sleep(ms) {
-    return new Promise(r => setTimeout(r, ms));
-}
-
-// ===== UTILITY: NORMAL CDF (Q-function) =====
 function normalCDF(z) {
-    const a1 = 0.254829592;
-    const a2 = -0.284496736;
-    const a3 = 1.421413741;
-    const a4 = -1.453152027;
-    const a5 = 1.061405429;
-    const p = 0.3275911;
+    const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
     const sign = z < 0 ? -1 : 1;
     z = Math.abs(z) / Math.sqrt(2);
     const t = 1.0 / (1.0 + p * z);
-    const y = 1.0 - (((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * Math.exp(-z * z));
+    const y = 1.0 - (((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-z*z));
     return 0.5 * (1.0 + sign * y);
 }
-
-// ===== BONFERRONI CORRECTION =====
 function bonferroniCriticalZ(alpha, numTests) {
     const correctedAlpha = alpha / numTests;
-    let z = 1.96; // Start with 95% CL
-    while (normalCDF(z) < 1 - correctedAlpha / 2) {
-        z += 0.01;
-    }
+    let z = 1.96;
+    while (normalCDF(z) < 1 - correctedAlpha / 2) { z += 0.01; }
     return z;
 }
 
-// ===== GEARS SVG GENERATOR =====
 function generateGearSVG() {
-    return `
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="gearGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#9333ea;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-            <circle cx="50" cy="50" r="35" fill="url(#gearGrad)" opacity="0.3"/>
-            <circle cx="50" cy="50" r="28" fill="none" stroke="url(#gearGrad)" stroke-width="2"/>
-            <circle cx="50" cy="50" r="20" fill="url(#gearGrad)" opacity="0.5"/>
-            <circle cx="50" cy="50" r="12" fill="none" stroke="url(#gearGrad)" stroke-width="1.5"/>
-        </svg>
-    `;
+    return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="gearGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#9333ea;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+        </linearGradient></defs>
+        <circle cx="50" cy="50" r="35" fill="url(#gearGrad)" opacity="0.3"/>
+        <circle cx="50" cy="50" r="28" fill="none" stroke="url(#gearGrad)" stroke-width="2"/>
+        <circle cx="50" cy="50" r="20" fill="url(#gearGrad)" opacity="0.5"/>
+        <circle cx="50" cy="50" r="12" fill="none" stroke="url(#gearGrad)" stroke-width="1.5"/>
+    </svg>`;
 }
-
 function initializeGears() {
     gearsContainer.innerHTML = '';
     for (let i = 0; i < 5; i++) {
@@ -766,10 +295,88 @@ function initializeGears() {
         gearsContainer.appendChild(gearDiv);
     }
 }
-
 initializeGears();
 
-// ===== WEBSOCKET CONNECTION =====
+// ===== ACCOUNT OAUTH LOGIC =====
+function parseDerivRedirect() {
+    const params = new URLSearchParams(window.location.search);
+    const found = [];
+    let i = 1;
+    while (params.has('acct' + i)) {
+        const accountId = params.get('acct' + i);
+        found.push({
+            accountId,
+            token: params.get('token' + i),
+            currency: params.get('cur' + i) || '',
+            type: accountId.startsWith('VRT') ? 'demo' : 'real',
+            balance: null
+        });
+        i++;
+    }
+    if (found.length) {
+        sessionStorage.setItem('deriv_accounts', JSON.stringify(found));
+        window.history.replaceState({}, '', window.location.pathname);
+    }
+    const stored = sessionStorage.getItem('deriv_accounts');
+    return stored ? JSON.parse(stored) : [];
+}
+
+function renderAccountBar() {
+    let bar = document.getElementById('derivAccountBar');
+    if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'derivAccountBar';
+        bar.style = 'display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(147,51,234,0.1);border:1px solid rgba(147,51,234,0.3);border-radius:12px;margin-bottom:20px;font-family:"Space Mono",monospace;font-size:0.8rem;';
+        document.getElementById('appContent').prepend(bar);
+    }
+    bar.innerHTML = `
+        <select id="derivAcctSelect" style="background:#1a1228;color:#fff;border:1px solid rgba(147,51,234,0.4);padding:8px;border-radius:8px;">
+            ${derivAccounts.map(a => `<option value="${a.accountId}" ${a.accountId===activeAccount?.accountId?'selected':''}>${a.type==='demo'?'🟡 DEMO':'🟢 REAL'} — ${a.accountId} — ${a.balance ?? '...'} ${a.currency}</option>`).join('')}
+        </select>
+        <button id="derivDisconnectBtn" style="background:none;border:none;color:#a78bfa;cursor:pointer;">Disconnect</button>
+    `;
+    document.getElementById('derivAcctSelect').onchange = (e) => {
+        connectDerivAccount(derivAccounts.find(a => a.accountId === e.target.value));
+    };
+    document.getElementById('derivDisconnectBtn').onclick = () => {
+        sessionStorage.removeItem('deriv_accounts');
+        location.reload();
+    };
+}
+
+function connectDerivAccount(account) {
+    activeAccount = account;
+    if (derivAccountWs) derivAccountWs.close();
+    derivAccountWs = new WebSocket(WS_URL);
+    derivAccountWs.onopen = () => derivAccountWs.send(JSON.stringify({ authorize: account.token }));
+    derivAccountWs.onmessage = (msg) => {
+        const data = JSON.parse(msg.data);
+        if (data.msg_type === 'authorize') {
+            derivAccountWs.send(JSON.stringify({ balance: 1, subscribe: 1 }));
+        }
+        if (data.msg_type === 'balance') {
+            const acct = derivAccounts.find(a => a.accountId === data.balance.loginid);
+            if (acct) acct.balance = data.balance.balance;
+            renderAccountBar();
+        }
+    };
+}
+
+function initAuthGate() {
+    document.getElementById('derivLoginLink').href = `https://oauth.deriv.com/oauth2/authorize?app_id=${APP_ID}`;
+    derivAccounts = parseDerivRedirect();
+    if (derivAccounts.length) {
+        document.getElementById('loginGate').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
+        renderAccountBar();
+        const demo = derivAccounts.find(a => a.type === 'demo') || derivAccounts[0];
+        connectDerivAccount(demo);
+        connectWebSocket(); // existing market-data engine — now starts only after login
+    }
+    // if no accounts found, loginGate stays visible (default state) and nothing else runs
+}
+
+// ===== WEBSOCKET CONNECTION (market data — unchanged engine) =====
 function connectWebSocket() {
     statusText.textContent = 'Connecting...';
     statusDot.style.background = '#ffa500';
@@ -781,16 +388,14 @@ function connectWebSocket() {
         statusText.textContent = 'Connected';
         statusDot.style.background = '#00ff88';
         statusDot.style.boxShadow = '0 0 12px #00ff88';
-        console.log('✅ Connected to DERIV WS');
+        console.log('✅ Connected to DERIV WS (market data)');
     };
 
     ws.onmessage = (event) => {
         try {
             const data = JSON.parse(event.data);
             handleMessage(data);
-        } catch (e) {
-            // Ignore parse errors
-        }
+        } catch (e) {}
     };
 
     ws.onerror = () => {
@@ -817,17 +422,14 @@ function handleMessage(data) {
         const symbol = data.ticks_history;
         const ticks = data.ticks.map(t => t.quote || t.price);
         if (marketData[symbol]) {
-            // Populate buffer with history
             marketData[symbol].buffer = ticks.slice(-BUFFER_SIZE);
             updateMarketChip(symbol);
         }
     }
-
     if (data.msg_type === 'tick' && data.tick) {
         const symbol = data.tick.symbol;
         const price = data.tick.quote;
         if (marketData[symbol]) {
-            // Push to buffer (auto-maintains last 200)
             marketData[symbol].buffer.push(price);
             if (marketData[symbol].buffer.length > BUFFER_SIZE) {
                 marketData[symbol].buffer.shift();
@@ -837,87 +439,51 @@ function handleMessage(data) {
     }
 }
 
-// ===== MARKET CHIP UPDATE =====
 function updateMarketChip(symbol) {
     const data = marketData[symbol];
     const chip = document.getElementById(`chip-${symbol}`);
     if (!chip) return;
-
     const bufferCount = data.buffer.length;
     const isComplete = bufferCount >= EARLY_READ_SIZE;
-
-    chip.innerHTML = `
-        <div class="market-chip-name">${symbol}</div>
-        <div class="market-chip-count">${bufferCount}/${EARLY_READ_SIZE}</div>
-    `;
-
-    if (isComplete) {
-        chip.classList.add('complete');
-    } else {
-        chip.classList.remove('complete');
-    }
+    chip.innerHTML = `<div class="market-chip-name">${symbol}</div><div class="market-chip-count">${bufferCount}/${EARLY_READ_SIZE}</div>`;
+    chip.classList.toggle('complete', isComplete);
 }
 
 // ===== SCAN ALL MARKETS =====
 async function scanAllMarkets() {
     if (isScanning) return;
-
     isScanning = true;
     scanComplete = false;
     scanBtn.disabled = true;
     scanBtn.classList.add('scanning');
     scanBtn.textContent = 'SCANNING...';
 
-    // Reset data
-    MARKETS.forEach(symbol => {
-        marketData[symbol] = { buffer: [] };
-    });
+    MARKETS.forEach(symbol => { marketData[symbol] = { buffer: [] }; });
 
-    // Show progress
     progressContainer.classList.add('active');
-    marketsGrid.innerHTML = MARKETS.map(symbol => 
-        `<div class="market-chip" id="chip-${symbol}">
-            <div class="market-chip-name">${symbol}</div>
-            <div class="market-chip-count">0/${EARLY_READ_SIZE}</div>
-        </div>`
+    marketsGrid.innerHTML = MARKETS.map(symbol =>
+        `<div class="market-chip" id="chip-${symbol}"><div class="market-chip-name">${symbol}</div><div class="market-chip-count">0/${EARLY_READ_SIZE}</div></div>`
     ).join('');
 
-    // Subscribe to all markets
     MARKETS.forEach(symbol => {
         if (ws && ws.readyState === WebSocket.OPEN) {
-            // Request full history (200 ticks)
-            ws.send(JSON.stringify({
-                ticks_history: symbol,
-                adjust_limit: 1,
-                end: 'latest',
-                count: BUFFER_SIZE,
-                style: 'ticks'
-            }));
-            // Subscribe to live ticks
-            ws.send(JSON.stringify({
-                ticks: symbol,
-                subscribe: 1
-            }));
+            ws.send(JSON.stringify({ ticks_history: symbol, adjust_limit: 1, end: 'latest', count: BUFFER_SIZE, style: 'ticks' }));
+            ws.send(JSON.stringify({ ticks: symbol, subscribe: 1 }));
         }
     });
 
-    // Wait for all markets to gather EARLY_READ_SIZE ticks
     let allReady = false;
-    let timeout = Date.now() + 120000; // 2 minute timeout
-
+    let timeout = Date.now() + 120000;
     while (!allReady && Date.now() < timeout) {
         allReady = MARKETS.every(symbol => marketData[symbol]?.buffer.length >= EARLY_READ_SIZE);
         await sleep(500);
     }
 
-    // Scan complete
     scanComplete = true;
     isScanning = false;
     scanBtn.classList.remove('scanning');
     scanBtn.disabled = false;
     scanBtn.textContent = '✓ GATHERING COMPLETE';
-
-    // Show prediction buttons
     predictionButtons.classList.add('active');
 }
 
@@ -925,169 +491,86 @@ async function scanAllMarkets() {
 function analyzeMatchesDiffers(symbol) {
     const data = marketData[symbol];
     if (!data || data.buffer.length === 0) return null;
-
     const decimals = DECIMALS[symbol];
     const digits = data.buffer.map(p => getLastDigit(p, decimals));
     const n = digits.length;
-
-    // Frequency count
     const counts = Array(10).fill(0);
     digits.forEach(d => counts[d]++);
-
-    // Chi-square
     const expected = n / 10;
     let chiSquare = 0;
-    counts.forEach(count => {
-        chiSquare += ((count - expected) ** 2) / expected;
-    });
-
-    return {
-        symbol,
-        n,
-        counts,
-        chiSquare,
-        digits
-    };
+    counts.forEach(count => { chiSquare += ((count - expected) ** 2) / expected; });
+    return { symbol, n, counts, chiSquare, digits };
 }
 
 // ===== ENGINE 2: OVER/UNDER =====
 function analyzeOverUnder(symbol) {
     const data = marketData[symbol];
     if (!data || data.buffer.length === 0) return null;
-
     const decimals = DECIMALS[symbol];
     const digits = data.buffer.map(p => getLastDigit(p, decimals));
     const n = digits.length;
-
-    // Valid barriers: 2–7 only
-    const barriers = [2, 3, 4, 5, 6, 7];
+    const barriers = [2,3,4,5,6,7];
     const results = [];
-
     barriers.forEach(barrier => {
         const underCount = digits.filter(d => d < barrier).length;
         const observed_pct = underCount / n;
         const baseline_pct = barrier / 10;
-        
-        const se = Math.sqrt((baseline_pct * (1 - baseline_pct)) / n);
+        const se = Math.sqrt((baseline_pct * (1-baseline_pct)) / n);
         const z = (observed_pct - baseline_pct) / (se || 0.001);
-
-        results.push({
-            barrier,
-            underCount,
-            observed_pct,
-            baseline_pct,
-            z,
-            abs_z: Math.abs(z)
-        });
+        results.push({ barrier, underCount, observed_pct, baseline_pct, z, abs_z: Math.abs(z) });
     });
-
-    return {
-        symbol,
-        n,
-        digits,
-        barriers: results
-    };
+    return { symbol, n, digits, barriers: results };
 }
 
 // ===== ENGINE 3: DATA QUALITY LAYER =====
 function analyzeDataQuality(analysisData) {
-    const { digits, symbol, n } = analysisData;
+    const { digits } = analysisData;
+    let checks = { runsTest: null, autocorrelation: null, entropy: null };
 
-    let checks = {
-        runsTest: null,
-        autocorrelation: null,
-        entropy: null
-    };
-
-    // Runs Test (Wald-Wolfowitz) on even/odd parity
     let runsZ = null;
     {
-        const parity = digits.map(d => d % 2); // 0 = even, 1 = odd
+        const parity = digits.map(d => d % 2);
         let runs = 1;
-        for (let i = 1; i < parity.length; i++) {
-            if (parity[i] !== parity[i - 1]) runs++;
-        }
+        for (let i = 1; i < parity.length; i++) if (parity[i] !== parity[i-1]) runs++;
         const n0 = parity.filter(p => p === 0).length;
         const n1 = parity.length - n0;
-        const expectedRuns = (2 * n0 * n1) / (n0 + n1) + 1;
-        const variance = (2 * n0 * n1 * (2 * n0 * n1 - n0 - n1)) / (((n0 + n1) ** 2) * (n0 + n1 - 1));
+        const expectedRuns = (2*n0*n1)/(n0+n1) + 1;
+        const variance = (2*n0*n1*(2*n0*n1-n0-n1)) / (((n0+n1)**2)*(n0+n1-1));
         runsZ = (runs - expectedRuns) / Math.sqrt(variance);
-        checks.runsTest = {
-            runs,
-            z: runsZ,
-            flagged: Math.abs(runsZ) > 1.96
-        };
+        checks.runsTest = { runs, z: runsZ, flagged: Math.abs(runsZ) > 1.96 };
     }
 
-    // Autocorrelation, lag 1–5
     let maxAutocorr = 0;
     {
         for (let lag = 1; lag <= 5; lag++) {
-            let sumProd = 0;
-            let sumSq1 = 0;
-            let sumSq2 = 0;
+            let sumProd=0, sumSq1=0, sumSq2=0;
             for (let i = 0; i < digits.length - lag; i++) {
-                sumProd += (digits[i] - 4.5) * (digits[i + lag] - 4.5);
-                sumSq1 += (digits[i] - 4.5) ** 2;
-                sumSq2 += (digits[i + lag] - 4.5) ** 2;
+                sumProd += (digits[i]-4.5)*(digits[i+lag]-4.5);
+                sumSq1 += (digits[i]-4.5)**2;
+                sumSq2 += (digits[i+lag]-4.5)**2;
             }
-            const corr = sumProd / Math.sqrt(sumSq1 * sumSq2);
+            const corr = sumProd / Math.sqrt(sumSq1*sumSq2);
             maxAutocorr = Math.max(maxAutocorr, Math.abs(corr));
         }
-        checks.autocorrelation = {
-            maxCorr: maxAutocorr,
-            flagged: maxAutocorr > 0.15
-        };
+        checks.autocorrelation = { maxCorr: maxAutocorr, flagged: maxAutocorr > 0.15 };
     }
 
-    // Shannon Entropy
     let entropy = 0;
     {
         const counts = Array(10).fill(0);
         digits.forEach(d => counts[d]++);
-        counts.forEach(count => {
-            if (count > 0) {
-                const p = count / digits.length;
-                entropy -= p * Math.log2(p);
-            }
-        });
+        counts.forEach(count => { if (count > 0) { const p = count/digits.length; entropy -= p*Math.log2(p); } });
         const maxEntropy = Math.log2(10);
         const entropyRatio = entropy / maxEntropy;
-        checks.entropy = {
-            entropy,
-            ratio: entropyRatio,
-            flagged: entropyRatio < 0.9
-        };
+        checks.entropy = { entropy, ratio: entropyRatio, flagged: entropyRatio < 0.9 };
     }
 
-    // Combine into badge
-    const failCount = [checks.runsTest.flagged, checks.autocorrelation.flagged, checks.entropy.flagged].filter(f => f).length;
-    let badge = '🟢 Clean';
-    let badgeClass = '';
-    if (failCount === 1) {
-        badge = '🟡 Caution';
-        badgeClass = 'caution';
-    } else if (failCount >= 2) {
-        badge = '🔴 Clustering detected';
-        badgeClass = 'warning';
-    }
+    const failCount = [checks.runsTest.flagged, checks.autocorrelation.flagged, checks.entropy.flagged].filter(f=>f).length;
+    let badge = '🟢 Clean', badgeClass = '';
+    if (failCount === 1) { badge = '🟡 Caution'; badgeClass = 'caution'; }
+    else if (failCount >= 2) { badge = '🔴 Clustering detected'; badgeClass = 'warning'; }
 
-    return {
-        checks,
-        badge,
-        badgeClass,
-        failCount
-    };
-}
-
-// ===== ENGINE 4: HONEST VERIFICATION (structure only) =====
-function setupVerificationTally() {
-    // This logs predictions and tracks real outcomes
-    // Will watch next tick on each market for verification
-    return {
-        predictions: [],
-        outcomes: []
-    };
+    return { checks, badge, badgeClass, failCount };
 }
 
 // ===== RUN ANALYSIS =====
@@ -1095,7 +578,6 @@ async function runAnalysis(type) {
     signalOverlay.classList.add('active');
     loadingAnimation.classList.remove('fade-out');
     signalCard.classList.remove('reveal');
-
     await sleep(100);
 
     let results = [];
@@ -1107,170 +589,81 @@ async function runAnalysis(type) {
                 const maxCount = Math.max(...analysis.counts);
                 const digit = analysis.counts.indexOf(maxCount);
                 const percentage = (maxCount / analysis.n) * 100;
-                
-                // Bonferroni correction for 10 digits × MARKETS.length combinations
-                const numTests = 10 * MARKETS.length;
-                const correctedZ = bonferroniCriticalZ(0.05, numTests);
-                
-                // Convert chi to z-like statistic for this digit
-                const z = (maxCount - analysis.n / 10) / Math.sqrt(analysis.n / 10);
-                
+                const z = (maxCount - analysis.n/10) / Math.sqrt(analysis.n/10);
                 const quality = analyzeDataQuality(analysis);
-                
-                results.push({
-                    symbol,
-                    digit,
-                    percentage,
-                    chi: analysis.chiSquare,
-                    z,
-                    quality,
-                    sort_key: percentage
-                });
+                results.push({ symbol, digit, percentage, chi: analysis.chiSquare, z, quality, sort_key: percentage });
             }
         });
-        results.sort((a, b) => b.sort_key - a.sort_key);
+        results.sort((a,b) => b.sort_key - a.sort_key);
     }
 
     if (type === 'differs') {
         MARKETS.forEach(symbol => {
             const analysis = analyzeMatchesDiffers(symbol);
             if (analysis) {
-                let minDeviation = Infinity;
-                let digit = 0;
+                let minDeviation = Infinity, digit = 0;
                 analysis.counts.forEach((count, i) => {
-                    const deviation = Math.abs((count / analysis.n * 100) - 10);
-                    if (deviation < minDeviation) {
-                        minDeviation = deviation;
-                        digit = i;
-                    }
+                    const deviation = Math.abs((count/analysis.n*100) - 10);
+                    if (deviation < minDeviation) { minDeviation = deviation; digit = i; }
                 });
-
-                const numTests = 10 * MARKETS.length;
-                const correctedZ = bonferroniCriticalZ(0.05, numTests);
-                
                 const quality = analyzeDataQuality(analysis);
-                
-                results.push({
-                    symbol,
-                    digit,
-                    deviation: minDeviation,
-                    chi: analysis.chiSquare,
-                    quality,
-                    sort_key: -minDeviation
-                });
+                results.push({ symbol, digit, deviation: minDeviation, chi: analysis.chiSquare, quality, sort_key: -minDeviation });
             }
         });
-        results.sort((a, b) => b.sort_key - a.sort_key);
+        results.sort((a,b) => b.sort_key - a.sort_key);
     }
 
     if (type === 'overunder') {
         MARKETS.forEach(symbol => {
             const analysis = analyzeOverUnder(symbol);
             if (analysis) {
-                // Find strongest |z| across all barriers
                 let strongest = analysis.barriers[0];
-                analysis.barriers.forEach(b => {
-                    if (b.abs_z > strongest.abs_z) {
-                        strongest = b;
-                    }
-                });
-
+                analysis.barriers.forEach(b => { if (b.abs_z > strongest.abs_z) strongest = b; });
                 const quality = analyzeDataQuality(analysis);
-                
-                results.push({
-                    symbol,
-                    barrier: strongest.barrier,
-                    direction: strongest.z > 0 ? 'UNDER' : 'OVER',
-                    z: strongest.z,
-                    abs_z: strongest.abs_z,
-                    quality,
-                    sort_key: strongest.abs_z
-                });
+                results.push({ symbol, barrier: strongest.barrier, direction: strongest.z > 0 ? 'UNDER' : 'OVER', z: strongest.z, abs_z: strongest.abs_z, quality, sort_key: strongest.abs_z });
             }
         });
-        results.sort((a, b) => b.sort_key - a.sort_key);
+        results.sort((a,b) => b.sort_key - a.sort_key);
     }
 
-    // Animate loading
     await sleep(9000);
-
     loadingAnimation.classList.add('fade-out');
     await sleep(300);
     signalCard.classList.add('reveal');
-
     displaySignal(type, results[0]);
 }
 
 // ===== DISPLAY SIGNAL =====
 function displaySignal(type, signal) {
-    const titleMap = {
-        'matches': '🎯 MATCHES SIGNAL',
-        'differs': '⚡ DIFFERS SIGNAL',
-        'overunder': '📊 OVER/UNDER SIGNAL'
-    };
-
-    const colorMap = {
-        'matches': 'matches-color',
-        'differs': 'differs-color',
-        'overunder': 'overunder-color'
-    };
+    const titleMap = { matches: '🎯 MATCHES SIGNAL', differs: '⚡ DIFFERS SIGNAL', overunder: '📊 OVER/UNDER SIGNAL' };
+    const colorMap = { matches: 'matches-color', differs: 'differs-color', overunder: 'overunder-color' };
 
     document.getElementById('signalTitle').textContent = titleMap[type];
     document.getElementById('signalMarket').textContent = signal.symbol;
     document.getElementById('signalDigit').className = `signal-digit ${colorMap[type]}`;
 
     const statsHtml = [];
-
     if (type === 'matches') {
         document.getElementById('signalDigit').textContent = signal.digit;
-        statsHtml.push(`
-            <div class="signal-stat">
-                <div class="signal-stat-label">Frequency %</div>
-                <div class="signal-stat-value">${signal.percentage.toFixed(2)}%</div>
-            </div>
-            <div class="signal-stat">
-                <div class="signal-stat-label">Chi-Square</div>
-                <div class="signal-stat-value">${signal.chi.toFixed(2)}</div>
-            </div>
-        `);
+        statsHtml.push(`<div class="signal-stat"><div class="signal-stat-label">Frequency %</div><div class="signal-stat-value">${signal.percentage.toFixed(2)}%</div></div>
+            <div class="signal-stat"><div class="signal-stat-label">Chi-Square</div><div class="signal-stat-value">${signal.chi.toFixed(2)}</div></div>`);
     }
-
     if (type === 'differs') {
         document.getElementById('signalDigit').textContent = signal.digit;
-        statsHtml.push(`
-            <div class="signal-stat">
-                <div class="signal-stat-label">Deviation %</div>
-                <div class="signal-stat-value">${signal.deviation.toFixed(2)}%</div>
-            </div>
-            <div class="signal-stat">
-                <div class="signal-stat-label">Chi-Square</div>
-                <div class="signal-stat-value">${signal.chi.toFixed(2)}</div>
-            </div>
-        `);
+        statsHtml.push(`<div class="signal-stat"><div class="signal-stat-label">Deviation %</div><div class="signal-stat-value">${signal.deviation.toFixed(2)}%</div></div>
+            <div class="signal-stat"><div class="signal-stat-label">Chi-Square</div><div class="signal-stat-value">${signal.chi.toFixed(2)}</div></div>`);
     }
-
     if (type === 'overunder') {
         document.getElementById('signalDigit').textContent = `${signal.direction} ${signal.barrier}`;
-        statsHtml.push(`
-            <div class="signal-stat">
-                <div class="signal-stat-label">Z-Score</div>
-                <div class="signal-stat-value">${signal.z.toFixed(3)}</div>
-            </div>
-            <div class="signal-stat">
-                <div class="signal-stat-label">|Z| Magnitude</div>
-                <div class="signal-stat-value">${signal.abs_z.toFixed(3)}</div>
-            </div>
-        `);
+        statsHtml.push(`<div class="signal-stat"><div class="signal-stat-label">Z-Score</div><div class="signal-stat-value">${signal.z.toFixed(3)}</div></div>
+            <div class="signal-stat"><div class="signal-stat-label">|Z| Magnitude</div><div class="signal-stat-value">${signal.abs_z.toFixed(3)}</div></div>`);
     }
-
     document.getElementById('signalStats').innerHTML = statsHtml.join('');
 
-    // Quality badge
     const badgeEl = document.getElementById('signalBadge');
     badgeEl.textContent = signal.quality.badge;
     badgeEl.className = `signal-badge ${signal.quality.badgeClass}`;
 
-    // Quality checks detail
     const checksHtml = [
         `<div class="quality-check-item">Runs Test: ${signal.quality.checks.runsTest.flagged ? '🔴' : '🟢'} z=${signal.quality.checks.runsTest.z.toFixed(3)}</div>`,
         `<div class="quality-check-item">Max Autocorr: ${signal.quality.checks.autocorrelation.flagged ? '🔴' : '🟢'} ρ=${signal.quality.checks.autocorrelation.maxCorr.toFixed(3)}</div>`,
@@ -1285,8 +678,8 @@ matchesBtn.addEventListener('click', () => runAnalysis('matches'));
 differsBtn.addEventListener('click', () => runAnalysis('differs'));
 overunderBtn.addEventListener('click', () => runAnalysis('overunder'));
 
-// ===== INITIALIZE =====
-connectWebSocket();
+// ===== INITIALIZE (gated behind login) =====
+initAuthGate();
 </script>
 
 </body>
