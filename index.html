@@ -7,16 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0a0612 0%, #16082a 100%);
-            color: #f0ecf8;
-            font-family: 'Space Grotesk', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+        html, body { min-height: 100vh; background: linear-gradient(135deg, #0a0612 0%, #16082a 100%); color: #f0ecf8; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
         body { padding: 24px 16px 60px; }
-
         .glow-backdrop { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .glow-orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.15; }
         .orb-1 { width: 600px; height: 600px; top: -200px; left: -150px; background: radial-gradient(circle, #7c3aed, #a855f7); animation: float 20s ease-in-out infinite; }
@@ -25,145 +17,89 @@
         @keyframes float { 0%,100% { transform: translate(0,0) scale(1);} 33% { transform: translate(50px,-40px) scale(1.1);} 66% { transform: translate(-30px,60px) scale(0.95);} }
         @keyframes float-delay { 0%,100% { transform: translate(0,0) scale(1);} 33% { transform: translate(-40px,50px) scale(0.9);} 66% { transform: translate(60px,-30px) scale(1.05);} }
         @keyframes float-slow { 0%,100% { transform: translate(0,0);} 50% { transform: translate(30px,30px);} }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(147, 51, 234, 0.1); }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #9333ea, #7c3aed); border-radius: 3px; }
-
         .app-container { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; }
-
         .app-header { text-align: center; padding: 30px 0 40px; position: relative; z-index: 2; }
-        .app-header h1 {
-            font-family: 'Orbitron', monospace; font-weight: 900; font-size: 2.8rem;
-            background: linear-gradient(135deg, #06f, #a855f7, #ec4899);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            letter-spacing: 3px; text-shadow: 0 0 60px rgba(147, 51, 234, 0.3);
-            animation: glow-pulse 3s ease-in-out infinite;
-        }
-        @keyframes glow-pulse { 0%,100% { filter: drop-shadow(0 0 20px rgba(147,51,234,0.3)); } 50% { filter: drop-shadow(0 0 40px rgba(147,51,234,0.6)); } }
+        .app-header h1 { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 2.8rem; background: linear-gradient(135deg, #06f, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 3px; }
         .app-header .subtitle { font-size: 0.85rem; color: #a78bfa; margin-top: 8px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
-
         .status-bar { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; font-size: 0.75rem; color: #a78bfa; font-family: 'Space Mono', monospace; }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff1493; box-shadow: 0 0 8px #ff1493; animation: pulse 2s ease-in-out infinite; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff1493; box-shadow: 0 0 8px #ff1493; }
         .status-dot.connected { background: #00ff88; box-shadow: 0 0 12px #00ff88; }
-        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-
         .content-area { position: relative; z-index: 2; }
-
         .scan-button-container { display: flex; justify-content: center; margin: 40px 0; }
-        .scan-btn {
-            padding: 18px 48px; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 1.1rem; letter-spacing: 2px;
-            border: 2px solid transparent; border-radius: 16px;
-            background: linear-gradient(135deg, rgba(147,51,234,0.2), rgba(168,85,247,0.1)) border-box;
-            color: #f0ecf8; cursor: pointer; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-            position: relative; box-shadow: 0 0 40px rgba(147,51,234,0.2); overflow: hidden;
-        }
-        .scan-btn::before {
-            content: ''; position: absolute; inset: 0; border-radius: 16px; padding: 2px;
-            background: linear-gradient(135deg, #9333ea, #a855f7, #ec4899);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.4s;
-        }
-        .scan-btn:hover::before { opacity: 1; }
-        .scan-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 0 60px rgba(147,51,234,0.4); }
-        .scan-btn:active { transform: scale(0.98); }
+        .scan-btn { padding: 18px 48px; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 1.1rem; letter-spacing: 2px; border: 2px solid transparent; border-radius: 16px; background: rgba(147,51,234,0.2); color: #f0ecf8; cursor: pointer; box-shadow: 0 0 40px rgba(147,51,234,0.2); }
         .scan-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .scan-btn.scanning { animation: button-glow 0.6s ease-in-out infinite; }
         @keyframes button-glow { 0%,100% { box-shadow: 0 0 40px rgba(147,51,234,0.3); } 50% { box-shadow: 0 0 80px rgba(147,51,234,0.6); } }
-
-        .progress-container { display: none; margin: 30px 0; padding: 24px; background: rgba(26,18,40,0.5); border: 1px solid rgba(147,51,234,0.2); border-radius: 16px; backdrop-filter: blur(20px); }
+        .progress-container { display: none; margin: 30px 0; padding: 24px; background: rgba(26,18,40,0.5); border: 1px solid rgba(147,51,234,0.2); border-radius: 16px; }
         .progress-container.active { display: block; }
         .progress-title { font-family: 'Orbitron', monospace; font-size: 0.8rem; letter-spacing: 2px; color: #a78bfa; text-transform: uppercase; margin-bottom: 16px; }
         .markets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 12px; }
-        .market-chip { padding: 12px 16px; background: rgba(147,51,234,0.1); border: 1px solid rgba(147,51,234,0.3); border-radius: 12px; text-align: center; transition: all 0.3s; cursor: default; }
-        .market-chip.complete { background: rgba(0,255,136,0.1); border-color: rgba(0,255,136,0.5); box-shadow: 0 0 20px rgba(0,255,136,0.2); }
-        .market-chip-name { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: #f0ecf8; font-weight: 600; margin-bottom: 4px; }
+        .market-chip { padding: 12px 16px; background: rgba(147,51,234,0.1); border: 1px solid rgba(147,51,234,0.3); border-radius: 12px; text-align: center; }
+        .market-chip.complete { background: rgba(0,255,136,0.1); border-color: rgba(0,255,136,0.5); }
+        .market-chip-name { font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; }
         .market-chip-count { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: #a78bfa; }
         .market-chip.complete .market-chip-count { color: #00ff88; }
-
         .prediction-buttons { display: none; gap: 16px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
         .prediction-buttons.active { display: flex; }
-        .pred-btn {
-            flex: 1; min-width: 150px; padding: 16px 24px; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.95rem; letter-spacing: 1px;
-            border: 2px solid transparent; border-radius: 14px;
-            background: linear-gradient(135deg, rgba(100,200,255,0.15), rgba(100,200,255,0.05));
-            color: #64c8ff; cursor: pointer; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-            position: relative; box-shadow: 0 0 30px rgba(100,200,255,0.15); text-transform: uppercase;
-        }
-        .pred-btn.matches { background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05)); color: #00ff88; box-shadow: 0 0 30px rgba(0,255,136,0.15); }
-        .pred-btn.differs { background: linear-gradient(135deg, rgba(255,51,102,0.15), rgba(255,51,102,0.05)); color: #ff3366; box-shadow: 0 0 30px rgba(255,51,102,0.15); }
-        .pred-btn.overunder { background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(236,72,153,0.05)); color: #ec4899; box-shadow: 0 0 30px rgba(236,72,153,0.15); }
-        .pred-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(147,51,234,0.3); filter: brightness(1.2); }
-        .pred-btn:active { transform: scale(0.98); }
-
-        .signal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(10,6,18,0.85); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease; }
-        .signal-overlay.active { display: flex; opacity: 1; }
-
+        .pred-btn { flex: 1; min-width: 150px; padding: 16px 24px; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.95rem; letter-spacing: 1px; border: 2px solid transparent; border-radius: 14px; cursor: pointer; text-transform: uppercase; }
+        .pred-btn.matches { background: rgba(0,255,136,0.15); color: #00ff88; }
+        .pred-btn.differs { background: rgba(255,51,102,0.15); color: #ff3366; }
+        .pred-btn.overunder { background: rgba(236,72,153,0.15); color: #ec4899; }
+        .signal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(10,6,18,0.85); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; }
+        .signal-overlay.active { display: flex; }
         .loading-animation { position: absolute; display: flex; align-items: center; justify-content: center; flex-direction: column; opacity: 1; transition: opacity 0.6s ease; }
         .loading-animation.fade-out { opacity: 0; pointer-events: none; }
         .gears-container { display: flex; align-items: center; justify-content: center; gap: 30px; height: 120px; margin-bottom: 30px; }
-        .gear { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; opacity: 0; }
-        .gear svg { width: 100%; height: 100%; }
+        .gear { width: 60px; height: 60px; opacity: 0; }
         @keyframes gear-pop { 0% { opacity:0; transform: scale(0) rotateZ(-180deg);} 60% { opacity:1; transform: scale(1.1);} 100% { opacity:1; transform: scale(1) rotateZ(0deg);} }
-        @keyframes gear-spin { 0% { transform: rotateZ(0deg);} 100% { transform: rotateZ(360deg);} }
+        @keyframes gear-spin { from { transform: rotateZ(0deg);} to { transform: rotateZ(360deg);} }
         .gear:nth-child(1) { animation: gear-pop 0.6s ease-out 0s forwards, gear-spin 4s linear 0.6s infinite; }
         .gear:nth-child(2) { animation: gear-pop 0.6s ease-out 0.15s forwards, gear-spin 4s linear 0.75s infinite reverse; }
         .gear:nth-child(3) { animation: gear-pop 0.6s ease-out 0.3s forwards, gear-spin 4s linear 0.9s infinite; }
         .gear:nth-child(4) { animation: gear-pop 0.6s ease-out 0.45s forwards, gear-spin 4s linear 1.05s infinite reverse; }
         .gear:nth-child(5) { animation: gear-pop 0.6s ease-out 0.6s forwards, gear-spin 4s linear 1.2s infinite; }
-
         .loading-text { font-family: 'Orbitron', monospace; font-size: 1.2rem; letter-spacing: 2px; color: #a78bfa; text-align: center; margin-top: 20px; text-transform: uppercase; }
-        .scanning-markets-text { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: #7c3aed; margin-top: 8px; letter-spacing: 1px; }
-
-        .signal-card {
-            position: absolute; background: linear-gradient(135deg, rgba(147,51,234,0.2), rgba(168,85,247,0.1));
-            border: 1px solid rgba(147,51,234,0.4); border-radius: 20px; padding: 40px; max-width: 600px; width: 90%;
-            backdrop-filter: blur(30px); box-shadow: 0 0 80px rgba(147,51,234,0.3), 0 0 120px rgba(168,85,247,0.2);
-            text-align: center; opacity: 0; transform: scale(0.5) rotateY(-90deg);
-            transition: all 0.8s cubic-bezier(0.34,1.56,0.64,1); perspective: 1000px; overflow-y: auto; max-height: 80vh;
-        }
-        .signal-card.reveal { opacity: 1; transform: scale(1) rotateY(0deg); }
+        .scanning-markets-text { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: #7c3aed; margin-top: 8px; }
+        .signal-card { position: absolute; background: rgba(147,51,234,0.15); border: 1px solid rgba(147,51,234,0.4); border-radius: 20px; padding: 40px; max-width: 600px; width: 90%; text-align: center; opacity: 0; transform: scale(0.5); transition: all 0.8s ease; overflow-y: auto; max-height: 80vh; }
+        .signal-card.reveal { opacity: 1; transform: scale(1); }
         .signal-title { font-family: 'Orbitron', monospace; font-size: 0.8rem; letter-spacing: 2px; color: #a78bfa; text-transform: uppercase; margin-bottom: 16px; }
-        .signal-digit { font-family: 'Space Mono', monospace; font-size: 4.5rem; font-weight: 700; margin: 20px 0; text-shadow: 0 0 40px currentColor; animation: digit-glow 2s ease-in-out infinite; }
-        @keyframes digit-glow { 0%,100% { filter: drop-shadow(0 0 10px currentColor); } 50% { filter: drop-shadow(0 0 30px currentColor); } }
+        .signal-digit { font-family: 'Space Mono', monospace; font-size: 4.5rem; font-weight: 700; margin: 20px 0; }
         .signal-digit.matches-color { color: #00ff88; }
         .signal-digit.differs-color { color: #ff3366; }
         .signal-digit.overunder-color { color: #ec4899; }
-        .signal-market { font-family: 'Space Mono', monospace; font-size: 0.85rem; color: #f0ecf8; font-weight: 600; margin-bottom: 20px; letter-spacing: 1px; }
+        .signal-market { font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 600; margin-bottom: 20px; }
         .signal-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(147,51,234,0.2); }
-        .signal-stat { padding: 12px; background: rgba(147,51,234,0.08); border-radius: 10px; border: 1px solid rgba(147,51,234,0.2); }
-        .signal-stat-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: #a78bfa; letter-spacing: 1px; text-transform: uppercase; }
-        .signal-stat-value { font-family: 'Space Mono', monospace; font-size: 1.1rem; color: #f0ecf8; font-weight: 700; margin-top: 4px; }
-        .signal-badge { display: inline-block; margin-top: 16px; padding: 6px 14px; background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.4); border-radius: 20px; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: #00ff88; letter-spacing: 1px; }
+        .signal-stat { padding: 12px; background: rgba(147,51,234,0.08); border-radius: 10px; }
+        .signal-stat-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: #a78bfa; text-transform: uppercase; }
+        .signal-stat-value { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; margin-top: 4px; }
+        .signal-badge { display: inline-block; margin-top: 16px; padding: 6px 14px; background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.4); border-radius: 20px; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: #00ff88; }
         .signal-badge.caution { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.4); color: #ffd700; }
         .signal-badge.warning { background: rgba(255,51,102,0.15); border-color: rgba(255,51,102,0.4); color: #ff3366; }
         .quality-checks { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(147,51,234,0.2); font-size: 0.75rem; text-align: left; color: #a78bfa; }
         .quality-check-item { margin: 4px 0; font-family: 'Space Mono', monospace; }
-
-        @media (max-width: 768px) { .app-header h1 { font-size: 2rem; } .signal-digit { font-size: 3.5rem; } .signal-card { padding: 30px; } .markets-grid { grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); } }
-        @media (max-width: 480px) { body { padding: 16px 12px 40px; } .app-header h1 { font-size: 1.6rem; } .scan-btn { padding: 14px 32px; font-size: 0.9rem; } .signal-digit { font-size: 2.8rem; } .signal-card { padding: 20px; } .markets-grid { grid-template-columns: repeat(2,1fr); } }
+        #loginGate { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; position: relative; z-index: 10; }
+        #derivLoginBtn { background: linear-gradient(135deg,#9333ea,#a855f7); color: #fff; padding: 16px 32px; border-radius: 14px; font-family: 'Orbitron', monospace; font-weight: 700; letter-spacing: 1px; border: none; cursor: pointer; font-size: 0.95rem; }
+        #derivAccountBar { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(147,51,234,0.1); border: 1px solid rgba(147,51,234,0.3); border-radius: 12px; margin-bottom: 20px; font-family: 'Space Mono', monospace; font-size: 0.8rem; }
+        #derivAccountBar select { background: #1a1228; color: #fff; border: 1px solid rgba(147,51,234,0.4); padding: 8px; border-radius: 8px; }
+        #derivAccountBar button { background: none; border: none; color: #a78bfa; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<!-- ===== LOGIN GATE (shown until Deriv account connected) ===== -->
-<div id="loginGate" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0612;color:#fff;text-align:center;padding:24px;position:relative;z-index:10;">
+<div id="loginGate">
     <h1 style="font-family:'Orbitron',monospace;font-size:2rem;background:linear-gradient(135deg,#06f,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;">NDEBE</h1>
     <p style="color:#a78bfa;margin:16px 0 32px;">Connect your Deriv account to unlock the full app</p>
-    <a id="derivLoginLink" href="#" style="background:linear-gradient(135deg,#9333ea,#a855f7);color:#fff;padding:16px 32px;border-radius:14px;text-decoration:none;font-family:'Orbitron',monospace;font-weight:700;letter-spacing:1px;box-shadow:0 0 40px rgba(147,51,234,0.4);">
-        LOG IN WITH DERIV
-    </a>
+    <button id="derivLoginBtn">LOG IN WITH DERIV</button>
     <p style="font-size:11px;color:#5a4d78;margin-top:24px;max-width:320px;">You'll be redirected to Deriv's own login page. Ndebe never sees or stores your password.</p>
+    <p id="loginStatusMsg" style="font-size:11px;color:#ff3366;margin-top:16px;max-width:320px;"></p>
 </div>
 
-<!-- ===== GLOW BACKDROP ===== -->
 <div class="glow-backdrop">
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
     <div class="glow-orb orb-3"></div>
 </div>
 
-<!-- ===== SIGNAL OVERLAY ===== -->
 <div class="signal-overlay" id="signalOverlay">
     <div class="loading-animation" id="loadingAnimation">
         <div class="gears-container" id="gearsContainer"></div>
@@ -180,7 +116,6 @@
     </div>
 </div>
 
-<!-- ===== MAIN APP (hidden until login) ===== -->
 <div class="app-container" id="appContent" style="display:none;">
     <header class="app-header">
         <h1>NDEBE</h1>
@@ -190,17 +125,14 @@
             <span id="statusText">Initialized</span>
         </div>
     </header>
-
     <div class="content-area">
         <div class="scan-button-container">
             <button class="scan-btn" id="scanBtn">⟳ SCAN ALL MARKETS</button>
         </div>
-
         <div class="progress-container" id="progressContainer">
             <div class="progress-title">🔄 Gathering 30 Ticks (Into 200-Tick Buffer)</div>
             <div class="markets-grid" id="marketsGrid"></div>
         </div>
-
         <div class="prediction-buttons" id="predictionButtons">
             <button class="pred-btn matches" id="matchesBtn">🎯 MATCHES</button>
             <button class="pred-btn differs" id="differsBtn">⚡ DIFFERS</button>
@@ -210,34 +142,16 @@
 </div>
 
 <script>
-// ============================================================
-// NDEBE STATISTICAL ENGINE + DERIV OAUTH ACCOUNT CONNECTION
-// ============================================================
-
-// ===== CONFIG =====
-const MARKETS = ['R_10', 'R_25', 'R_50', 'R_75', 'R_100', '1HZ10V', '1HZ25V', '1HZ50V', '1HZ75V', '1HZ100V', 'JD10', 'JD25'];
-const DECIMALS = {
-    'R_10': 3, 'R_25': 3, 'R_50': 4, 'R_75': 4, 'R_100': 2,
-    '1HZ10V': 2, '1HZ25V': 2, '1HZ50V': 2, '1HZ75V': 2, '1HZ100V': 2,
-    'JD10': 2, 'JD25': 2
-};
+const MARKETS = ['R_10','R_25','R_50','R_75','R_100','1HZ10V','1HZ25V','1HZ50V','1HZ75V','1HZ100V','JD10','JD25'];
+const DECIMALS = { 'R_10':3,'R_25':3,'R_50':4,'R_75':4,'R_100':2,'1HZ10V':2,'1HZ25V':2,'1HZ50V':2,'1HZ75V':2,'1HZ100V':2,'JD10':2,'JD25':2 };
 const BUFFER_SIZE = 200;
 const EARLY_READ_SIZE = 30;
-const WS_URL = 'wss://ws.derivws.com/websockets/v3?app_id=1089'; // market data — public, unchanged
+const MARKET_WS_URL = 'wss://ws.derivws.com/websockets/v3?app_id=1089';
 
-// ===== ACCOUNT OAUTH CONFIG =====
-const APP_ID = '33B44tAtovshdIedmNunD'; // Ndebe — registered Deriv app_id
-let derivAccounts = [];
-let activeAccount = null;
-let derivAccountWs = null;
-
-// ===== STATE =====
 let ws = null;
 let marketData = {};
 let isScanning = false;
-let scanComplete = false;
 
-// ===== DOM REFS =====
 const scanBtn = document.getElementById('scanBtn');
 const progressContainer = document.getElementById('progressContainer');
 const marketsGrid = document.getElementById('marketsGrid');
@@ -252,39 +166,11 @@ const gearsContainer = document.getElementById('gearsContainer');
 const statusDot = document.getElementById('statusDot');
 const statusText = document.getElementById('statusText');
 
-// ===== UTILITY =====
-function getLastDigit(price, decimals) {
-    const priceStr = price.toFixed(decimals);
-    return parseInt(priceStr.slice(-1), 10);
-}
+function getLastDigit(price, decimals) { return parseInt(price.toFixed(decimals).slice(-1), 10); }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function normalCDF(z) {
-    const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
-    const sign = z < 0 ? -1 : 1;
-    z = Math.abs(z) / Math.sqrt(2);
-    const t = 1.0 / (1.0 + p * z);
-    const y = 1.0 - (((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-z*z));
-    return 0.5 * (1.0 + sign * y);
-}
-function bonferroniCriticalZ(alpha, numTests) {
-    const correctedAlpha = alpha / numTests;
-    let z = 1.96;
-    while (normalCDF(z) < 1 - correctedAlpha / 2) { z += 0.01; }
-    return z;
-}
-
 function generateGearSVG() {
-    return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <defs><linearGradient id="gearGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#9333ea;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
-        </linearGradient></defs>
-        <circle cx="50" cy="50" r="35" fill="url(#gearGrad)" opacity="0.3"/>
-        <circle cx="50" cy="50" r="28" fill="none" stroke="url(#gearGrad)" stroke-width="2"/>
-        <circle cx="50" cy="50" r="20" fill="url(#gearGrad)" opacity="0.5"/>
-        <circle cx="50" cy="50" r="12" fill="none" stroke="url(#gearGrad)" stroke-width="1.5"/>
-    </svg>`;
+    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gearGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#9333ea;stop-opacity:1" /><stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" /></linearGradient></defs><circle cx="50" cy="50" r="35" fill="url(#gearGrad)" opacity="0.3"/><circle cx="50" cy="50" r="28" fill="none" stroke="url(#gearGrad)" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="url(#gearGrad)" opacity="0.5"/><circle cx="50" cy="50" r="12" fill="none" stroke="url(#gearGrad)" stroke-width="1.5"/></svg>';
 }
 function initializeGears() {
     gearsContainer.innerHTML = '';
@@ -297,333 +183,172 @@ function initializeGears() {
 }
 initializeGears();
 
-// ===== ACCOUNT OAUTH LOGIC =====
-function parseDerivRedirect() {
-    const params = new URLSearchParams(window.location.search);
-    const found = [];
-    let i = 1;
-    while (params.has('acct' + i)) {
-        const accountId = params.get('acct' + i);
-        found.push({
-            accountId,
-            token: params.get('token' + i),
-            currency: params.get('cur' + i) || '',
-            type: accountId.startsWith('VRT') ? 'demo' : 'real',
-            balance: null
-        });
-        i++;
-    }
-    if (found.length) {
-        sessionStorage.setItem('deriv_accounts', JSON.stringify(found));
-        window.history.replaceState({}, '', window.location.pathname);
-    }
-    const stored = sessionStorage.getItem('deriv_accounts');
-    return stored ? JSON.parse(stored) : [];
-}
-
-function renderAccountBar() {
-    let bar = document.getElementById('derivAccountBar');
-    if (!bar) {
-        bar = document.createElement('div');
-        bar.id = 'derivAccountBar';
-        bar.style = 'display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(147,51,234,0.1);border:1px solid rgba(147,51,234,0.3);border-radius:12px;margin-bottom:20px;font-family:"Space Mono",monospace;font-size:0.8rem;';
-        document.getElementById('appContent').prepend(bar);
-    }
-    bar.innerHTML = `
-        <select id="derivAcctSelect" style="background:#1a1228;color:#fff;border:1px solid rgba(147,51,234,0.4);padding:8px;border-radius:8px;">
-            ${derivAccounts.map(a => `<option value="${a.accountId}" ${a.accountId===activeAccount?.accountId?'selected':''}>${a.type==='demo'?'🟡 DEMO':'🟢 REAL'} — ${a.accountId} — ${a.balance ?? '...'} ${a.currency}</option>`).join('')}
-        </select>
-        <button id="derivDisconnectBtn" style="background:none;border:none;color:#a78bfa;cursor:pointer;">Disconnect</button>
-    `;
-    document.getElementById('derivAcctSelect').onchange = (e) => {
-        connectDerivAccount(derivAccounts.find(a => a.accountId === e.target.value));
-    };
-    document.getElementById('derivDisconnectBtn').onclick = () => {
-        sessionStorage.removeItem('deriv_accounts');
-        location.reload();
-    };
-}
-
-function connectDerivAccount(account) {
-    activeAccount = account;
-    if (derivAccountWs) derivAccountWs.close();
-    derivAccountWs = new WebSocket(WS_URL);
-    derivAccountWs.onopen = () => derivAccountWs.send(JSON.stringify({ authorize: account.token }));
-    derivAccountWs.onmessage = (msg) => {
-        const data = JSON.parse(msg.data);
-        if (data.msg_type === 'authorize') {
-            derivAccountWs.send(JSON.stringify({ balance: 1, subscribe: 1 }));
-        }
-        if (data.msg_type === 'balance') {
-            const acct = derivAccounts.find(a => a.accountId === data.balance.loginid);
-            if (acct) acct.balance = data.balance.balance;
-            renderAccountBar();
-        }
-    };
-}
-
-function initAuthGate() {
-    document.getElementById('derivLoginLink').href = `https://oauth.deriv.com/oauth2/authorize?app_id=${APP_ID}`;
-    derivAccounts = parseDerivRedirect();
-    if (derivAccounts.length) {
-        document.getElementById('loginGate').style.display = 'none';
-        document.getElementById('appContent').style.display = 'block';
-        renderAccountBar();
-        const demo = derivAccounts.find(a => a.type === 'demo') || derivAccounts[0];
-        connectDerivAccount(demo);
-        connectWebSocket(); // existing market-data engine — now starts only after login
-    }
-    // if no accounts found, loginGate stays visible (default state) and nothing else runs
-}
-
-// ===== WEBSOCKET CONNECTION (market data — unchanged engine) =====
-function connectWebSocket() {
+function connectMarketWS() {
     statusText.textContent = 'Connecting...';
     statusDot.style.background = '#ffa500';
-    statusDot.style.boxShadow = '0 0 8px #ffa500';
-
-    ws = new WebSocket(WS_URL);
-
-    ws.onopen = () => {
-        statusText.textContent = 'Connected';
-        statusDot.style.background = '#00ff88';
-        statusDot.style.boxShadow = '0 0 12px #00ff88';
-        console.log('✅ Connected to DERIV WS (market data)');
-    };
-
-    ws.onmessage = (event) => {
-        try {
-            const data = JSON.parse(event.data);
-            handleMessage(data);
-        } catch (e) {}
-    };
-
-    ws.onerror = () => {
-        statusText.textContent = 'Error';
-        statusDot.style.background = '#ff1493';
-    };
-
-    ws.onclose = () => {
-        statusText.textContent = 'Disconnected';
-        statusDot.style.background = '#ff1493';
-        setTimeout(connectWebSocket, 5000);
-    };
-
-    setInterval(() => {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ ping: Date.now() }));
-        }
-    }, 30000);
+    ws = new WebSocket(MARKET_WS_URL);
+    ws.onopen = () => { statusText.textContent = 'Connected'; statusDot.style.background = '#00ff88'; statusDot.classList.add('connected'); };
+    ws.onmessage = (event) => { try { handleMessage(JSON.parse(event.data)); } catch(e){} };
+    ws.onerror = () => { statusText.textContent = 'Error'; statusDot.style.background = '#ff1493'; };
+    ws.onclose = () => { statusText.textContent = 'Disconnected'; statusDot.style.background = '#ff1493'; setTimeout(connectMarketWS, 5000); };
+    setInterval(() => { if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ ping: Date.now() })); }, 30000);
 }
-
-// ===== MESSAGE HANDLER =====
 function handleMessage(data) {
     if (data.msg_type === 'ticks_history' && data.ticks) {
         const symbol = data.ticks_history;
         const ticks = data.ticks.map(t => t.quote || t.price);
-        if (marketData[symbol]) {
-            marketData[symbol].buffer = ticks.slice(-BUFFER_SIZE);
-            updateMarketChip(symbol);
-        }
+        if (marketData[symbol]) { marketData[symbol].buffer = ticks.slice(-BUFFER_SIZE); updateMarketChip(symbol); }
     }
     if (data.msg_type === 'tick' && data.tick) {
-        const symbol = data.tick.symbol;
-        const price = data.tick.quote;
+        const symbol = data.tick.symbol, price = data.tick.quote;
         if (marketData[symbol]) {
             marketData[symbol].buffer.push(price);
-            if (marketData[symbol].buffer.length > BUFFER_SIZE) {
-                marketData[symbol].buffer.shift();
-            }
+            if (marketData[symbol].buffer.length > BUFFER_SIZE) marketData[symbol].buffer.shift();
             updateMarketChip(symbol);
         }
     }
 }
-
 function updateMarketChip(symbol) {
     const data = marketData[symbol];
-    const chip = document.getElementById(`chip-${symbol}`);
+    const chip = document.getElementById('chip-' + symbol);
     if (!chip) return;
     const bufferCount = data.buffer.length;
-    const isComplete = bufferCount >= EARLY_READ_SIZE;
-    chip.innerHTML = `<div class="market-chip-name">${symbol}</div><div class="market-chip-count">${bufferCount}/${EARLY_READ_SIZE}</div>`;
-    chip.classList.toggle('complete', isComplete);
+    chip.innerHTML = '<div class="market-chip-name">' + symbol + '</div><div class="market-chip-count">' + bufferCount + '/' + EARLY_READ_SIZE + '</div>';
+    chip.classList.toggle('complete', bufferCount >= EARLY_READ_SIZE);
 }
 
-// ===== SCAN ALL MARKETS =====
 async function scanAllMarkets() {
     if (isScanning) return;
     isScanning = true;
-    scanComplete = false;
-    scanBtn.disabled = true;
-    scanBtn.classList.add('scanning');
-    scanBtn.textContent = 'SCANNING...';
-
+    scanBtn.disabled = true; scanBtn.classList.add('scanning'); scanBtn.textContent = 'SCANNING...';
     MARKETS.forEach(symbol => { marketData[symbol] = { buffer: [] }; });
-
     progressContainer.classList.add('active');
-    marketsGrid.innerHTML = MARKETS.map(symbol =>
-        `<div class="market-chip" id="chip-${symbol}"><div class="market-chip-name">${symbol}</div><div class="market-chip-count">0/${EARLY_READ_SIZE}</div></div>`
-    ).join('');
-
+    marketsGrid.innerHTML = MARKETS.map(symbol => '<div class="market-chip" id="chip-' + symbol + '"><div class="market-chip-name">' + symbol + '</div><div class="market-chip-count">0/' + EARLY_READ_SIZE + '</div></div>').join('');
     MARKETS.forEach(symbol => {
         if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ ticks_history: symbol, adjust_limit: 1, end: 'latest', count: BUFFER_SIZE, style: 'ticks' }));
             ws.send(JSON.stringify({ ticks: symbol, subscribe: 1 }));
         }
     });
-
-    let allReady = false;
-    let timeout = Date.now() + 120000;
-    while (!allReady && Date.now() < timeout) {
-        allReady = MARKETS.every(symbol => marketData[symbol]?.buffer.length >= EARLY_READ_SIZE);
+    let allReady = false, timeoutAt = Date.now() + 120000;
+    while (!allReady && Date.now() < timeoutAt) {
+        allReady = MARKETS.every(symbol => marketData[symbol] && marketData[symbol].buffer.length >= EARLY_READ_SIZE);
         await sleep(500);
     }
-
-    scanComplete = true;
-    isScanning = false;
-    scanBtn.classList.remove('scanning');
-    scanBtn.disabled = false;
-    scanBtn.textContent = '✓ GATHERING COMPLETE';
+    isScanning = false; scanBtn.classList.remove('scanning'); scanBtn.disabled = false; scanBtn.textContent = '✓ GATHERING COMPLETE';
     predictionButtons.classList.add('active');
 }
 
-// ===== ENGINE 1: MATCHES/DIFFERS =====
 function analyzeMatchesDiffers(symbol) {
     const data = marketData[symbol];
     if (!data || data.buffer.length === 0) return null;
-    const decimals = DECIMALS[symbol];
-    const digits = data.buffer.map(p => getLastDigit(p, decimals));
+    const digits = data.buffer.map(p => getLastDigit(p, DECIMALS[symbol]));
     const n = digits.length;
     const counts = Array(10).fill(0);
     digits.forEach(d => counts[d]++);
     const expected = n / 10;
     let chiSquare = 0;
-    counts.forEach(count => { chiSquare += ((count - expected) ** 2) / expected; });
-    return { symbol, n, counts, chiSquare, digits };
+    counts.forEach(c => { chiSquare += ((c - expected) ** 2) / expected; });
+    return { symbol: symbol, n: n, counts: counts, chiSquare: chiSquare, digits: digits };
 }
 
-// ===== ENGINE 2: OVER/UNDER =====
 function analyzeOverUnder(symbol) {
     const data = marketData[symbol];
     if (!data || data.buffer.length === 0) return null;
-    const decimals = DECIMALS[symbol];
-    const digits = data.buffer.map(p => getLastDigit(p, decimals));
+    const digits = data.buffer.map(p => getLastDigit(p, DECIMALS[symbol]));
     const n = digits.length;
-    const barriers = [2,3,4,5,6,7];
     const results = [];
-    barriers.forEach(barrier => {
+    [2,3,4,5,6,7].forEach(barrier => {
         const underCount = digits.filter(d => d < barrier).length;
-        const observed_pct = underCount / n;
-        const baseline_pct = barrier / 10;
-        const se = Math.sqrt((baseline_pct * (1-baseline_pct)) / n);
+        const observed_pct = underCount / n, baseline_pct = barrier / 10;
+        const se = Math.sqrt((baseline_pct * (1 - baseline_pct)) / n);
         const z = (observed_pct - baseline_pct) / (se || 0.001);
-        results.push({ barrier, underCount, observed_pct, baseline_pct, z, abs_z: Math.abs(z) });
+        results.push({ barrier: barrier, observed_pct: observed_pct, baseline_pct: baseline_pct, z: z, abs_z: Math.abs(z) });
     });
-    return { symbol, n, digits, barriers: results };
+    return { symbol: symbol, n: n, digits: digits, barriers: results };
 }
 
-// ===== ENGINE 3: DATA QUALITY LAYER =====
 function analyzeDataQuality(analysisData) {
-    const { digits } = analysisData;
-    let checks = { runsTest: null, autocorrelation: null, entropy: null };
-
-    let runsZ = null;
+    const digits = analysisData.digits;
+    const checks = {};
     {
         const parity = digits.map(d => d % 2);
         let runs = 1;
         for (let i = 1; i < parity.length; i++) if (parity[i] !== parity[i-1]) runs++;
-        const n0 = parity.filter(p => p === 0).length;
-        const n1 = parity.length - n0;
+        const n0 = parity.filter(p => p === 0).length, n1 = parity.length - n0;
         const expectedRuns = (2*n0*n1)/(n0+n1) + 1;
-        const variance = (2*n0*n1*(2*n0*n1-n0-n1)) / (((n0+n1)**2)*(n0+n1-1));
-        runsZ = (runs - expectedRuns) / Math.sqrt(variance);
-        checks.runsTest = { runs, z: runsZ, flagged: Math.abs(runsZ) > 1.96 };
+        const variance = (2*n0*n1*(2*n0*n1-n0-n1)) / (((n0+n1)*(n0+n1))*(n0+n1-1));
+        const z = (runs - expectedRuns) / Math.sqrt(variance);
+        checks.runsTest = { z: z, flagged: Math.abs(z) > 1.96 };
     }
-
-    let maxAutocorr = 0;
     {
+        let maxAutocorr = 0;
         for (let lag = 1; lag <= 5; lag++) {
-            let sumProd=0, sumSq1=0, sumSq2=0;
+            let sumProd=0,sumSq1=0,sumSq2=0;
             for (let i = 0; i < digits.length - lag; i++) {
                 sumProd += (digits[i]-4.5)*(digits[i+lag]-4.5);
-                sumSq1 += (digits[i]-4.5)**2;
-                sumSq2 += (digits[i+lag]-4.5)**2;
+                sumSq1 += (digits[i]-4.5)*(digits[i]-4.5);
+                sumSq2 += (digits[i+lag]-4.5)*(digits[i+lag]-4.5);
             }
-            const corr = sumProd / Math.sqrt(sumSq1*sumSq2);
-            maxAutocorr = Math.max(maxAutocorr, Math.abs(corr));
+            maxAutocorr = Math.max(maxAutocorr, Math.abs(sumProd/Math.sqrt(sumSq1*sumSq2)));
         }
         checks.autocorrelation = { maxCorr: maxAutocorr, flagged: maxAutocorr > 0.15 };
     }
-
-    let entropy = 0;
     {
         const counts = Array(10).fill(0);
         digits.forEach(d => counts[d]++);
-        counts.forEach(count => { if (count > 0) { const p = count/digits.length; entropy -= p*Math.log2(p); } });
-        const maxEntropy = Math.log2(10);
-        const entropyRatio = entropy / maxEntropy;
-        checks.entropy = { entropy, ratio: entropyRatio, flagged: entropyRatio < 0.9 };
+        let entropy = 0;
+        counts.forEach(c => { if (c > 0) { const p = c/digits.length; entropy -= p*Math.log2(p); } });
+        const ratio = entropy / Math.log2(10);
+        checks.entropy = { entropy: entropy, flagged: ratio < 0.9 };
     }
-
-    const failCount = [checks.runsTest.flagged, checks.autocorrelation.flagged, checks.entropy.flagged].filter(f=>f).length;
+    const failCount = [checks.runsTest.flagged, checks.autocorrelation.flagged, checks.entropy.flagged].filter(function(f){return f;}).length;
     let badge = '🟢 Clean', badgeClass = '';
     if (failCount === 1) { badge = '🟡 Caution'; badgeClass = 'caution'; }
     else if (failCount >= 2) { badge = '🔴 Clustering detected'; badgeClass = 'warning'; }
-
-    return { checks, badge, badgeClass, failCount };
+    return { checks: checks, badge: badge, badgeClass: badgeClass };
 }
 
-// ===== RUN ANALYSIS =====
 async function runAnalysis(type) {
     signalOverlay.classList.add('active');
     loadingAnimation.classList.remove('fade-out');
     signalCard.classList.remove('reveal');
     await sleep(100);
-
     let results = [];
 
     if (type === 'matches') {
         MARKETS.forEach(symbol => {
-            const analysis = analyzeMatchesDiffers(symbol);
-            if (analysis) {
-                const maxCount = Math.max(...analysis.counts);
-                const digit = analysis.counts.indexOf(maxCount);
-                const percentage = (maxCount / analysis.n) * 100;
-                const z = (maxCount - analysis.n/10) / Math.sqrt(analysis.n/10);
-                const quality = analyzeDataQuality(analysis);
-                results.push({ symbol, digit, percentage, chi: analysis.chiSquare, z, quality, sort_key: percentage });
+            const a = analyzeMatchesDiffers(symbol);
+            if (a) {
+                const maxCount = Math.max.apply(null, a.counts);
+                const digit = a.counts.indexOf(maxCount);
+                const percentage = (maxCount/a.n)*100;
+                results.push({ symbol: symbol, digit: digit, percentage: percentage, chi: a.chiSquare, quality: analyzeDataQuality(a), sort_key: percentage });
             }
         });
-        results.sort((a,b) => b.sort_key - a.sort_key);
+        results.sort(function(x,y){ return y.sort_key - x.sort_key; });
     }
-
     if (type === 'differs') {
         MARKETS.forEach(symbol => {
-            const analysis = analyzeMatchesDiffers(symbol);
-            if (analysis) {
-                let minDeviation = Infinity, digit = 0;
-                analysis.counts.forEach((count, i) => {
-                    const deviation = Math.abs((count/analysis.n*100) - 10);
-                    if (deviation < minDeviation) { minDeviation = deviation; digit = i; }
-                });
-                const quality = analyzeDataQuality(analysis);
-                results.push({ symbol, digit, deviation: minDeviation, chi: analysis.chiSquare, quality, sort_key: -minDeviation });
+            const a = analyzeMatchesDiffers(symbol);
+            if (a) {
+                let minDev = Infinity, digit = 0;
+                a.counts.forEach(function(c,i){ const dev = Math.abs((c/a.n*100)-10); if (dev < minDev) { minDev = dev; digit = i; } });
+                results.push({ symbol: symbol, digit: digit, deviation: minDev, chi: a.chiSquare, quality: analyzeDataQuality(a), sort_key: -minDev });
             }
         });
-        results.sort((a,b) => b.sort_key - a.sort_key);
+        results.sort(function(x,y){ return y.sort_key - x.sort_key; });
     }
-
     if (type === 'overunder') {
         MARKETS.forEach(symbol => {
-            const analysis = analyzeOverUnder(symbol);
-            if (analysis) {
-                let strongest = analysis.barriers[0];
-                analysis.barriers.forEach(b => { if (b.abs_z > strongest.abs_z) strongest = b; });
-                const quality = analyzeDataQuality(analysis);
-                results.push({ symbol, barrier: strongest.barrier, direction: strongest.z > 0 ? 'UNDER' : 'OVER', z: strongest.z, abs_z: strongest.abs_z, quality, sort_key: strongest.abs_z });
+            const a = analyzeOverUnder(symbol);
+            if (a) {
+                let strongest = a.barriers[0];
+                a.barriers.forEach(function(b){ if (b.abs_z > strongest.abs_z) strongest = b; });
+                results.push({ symbol: symbol, barrier: strongest.barrier, direction: strongest.z > 0 ? 'UNDER' : 'OVER', z: strongest.z, abs_z: strongest.abs_z, quality: analyzeDataQuality(a), sort_key: strongest.abs_z });
             }
         });
-        results.sort((a,b) => b.sort_key - a.sort_key);
+        results.sort(function(x,y){ return y.sort_key - x.sort_key; });
     }
 
     await sleep(9000);
@@ -633,53 +358,158 @@ async function runAnalysis(type) {
     displaySignal(type, results[0]);
 }
 
-// ===== DISPLAY SIGNAL =====
 function displaySignal(type, signal) {
-    const titleMap = { matches: '🎯 MATCHES SIGNAL', differs: '⚡ DIFFERS SIGNAL', overunder: '📊 OVER/UNDER SIGNAL' };
-    const colorMap = { matches: 'matches-color', differs: 'differs-color', overunder: 'overunder-color' };
-
+    const titleMap = { matches:'🎯 MATCHES SIGNAL', differs:'⚡ DIFFERS SIGNAL', overunder:'📊 OVER/UNDER SIGNAL' };
+    const colorMap = { matches:'matches-color', differs:'differs-color', overunder:'overunder-color' };
     document.getElementById('signalTitle').textContent = titleMap[type];
     document.getElementById('signalMarket').textContent = signal.symbol;
-    document.getElementById('signalDigit').className = `signal-digit ${colorMap[type]}`;
-
+    document.getElementById('signalDigit').className = 'signal-digit ' + colorMap[type];
     const statsHtml = [];
     if (type === 'matches') {
         document.getElementById('signalDigit').textContent = signal.digit;
-        statsHtml.push(`<div class="signal-stat"><div class="signal-stat-label">Frequency %</div><div class="signal-stat-value">${signal.percentage.toFixed(2)}%</div></div>
-            <div class="signal-stat"><div class="signal-stat-label">Chi-Square</div><div class="signal-stat-value">${signal.chi.toFixed(2)}</div></div>`);
+        statsHtml.push('<div class="signal-stat"><div class="signal-stat-label">Frequency %</div><div class="signal-stat-value">' + signal.percentage.toFixed(2) + '%</div></div><div class="signal-stat"><div class="signal-stat-label">Chi-Square</div><div class="signal-stat-value">' + signal.chi.toFixed(2) + '</div></div>');
     }
     if (type === 'differs') {
         document.getElementById('signalDigit').textContent = signal.digit;
-        statsHtml.push(`<div class="signal-stat"><div class="signal-stat-label">Deviation %</div><div class="signal-stat-value">${signal.deviation.toFixed(2)}%</div></div>
-            <div class="signal-stat"><div class="signal-stat-label">Chi-Square</div><div class="signal-stat-value">${signal.chi.toFixed(2)}</div></div>`);
+        statsHtml.push('<div class="signal-stat"><div class="signal-stat-label">Deviation %</div><div class="signal-stat-value">' + signal.deviation.toFixed(2) + '%</div></div><div class="signal-stat"><div class="signal-stat-label">Chi-Square</div><div class="signal-stat-value">' + signal.chi.toFixed(2) + '</div></div>');
     }
     if (type === 'overunder') {
-        document.getElementById('signalDigit').textContent = `${signal.direction} ${signal.barrier}`;
-        statsHtml.push(`<div class="signal-stat"><div class="signal-stat-label">Z-Score</div><div class="signal-stat-value">${signal.z.toFixed(3)}</div></div>
-            <div class="signal-stat"><div class="signal-stat-label">|Z| Magnitude</div><div class="signal-stat-value">${signal.abs_z.toFixed(3)}</div></div>`);
+        document.getElementById('signalDigit').textContent = signal.direction + ' ' + signal.barrier;
+        statsHtml.push('<div class="signal-stat"><div class="signal-stat-label">Z-Score</div><div class="signal-stat-value">' + signal.z.toFixed(3) + '</div></div><div class="signal-stat"><div class="signal-stat-label">|Z| Magnitude</div><div class="signal-stat-value">' + signal.abs_z.toFixed(3) + '</div></div>');
     }
     document.getElementById('signalStats').innerHTML = statsHtml.join('');
-
     const badgeEl = document.getElementById('signalBadge');
     badgeEl.textContent = signal.quality.badge;
-    badgeEl.className = `signal-badge ${signal.quality.badgeClass}`;
-
-    const checksHtml = [
-        `<div class="quality-check-item">Runs Test: ${signal.quality.checks.runsTest.flagged ? '🔴' : '🟢'} z=${signal.quality.checks.runsTest.z.toFixed(3)}</div>`,
-        `<div class="quality-check-item">Max Autocorr: ${signal.quality.checks.autocorrelation.flagged ? '🔴' : '🟢'} ρ=${signal.quality.checks.autocorrelation.maxCorr.toFixed(3)}</div>`,
-        `<div class="quality-check-item">Entropy: ${signal.quality.checks.entropy.flagged ? '🔴' : '🟢'} H=${signal.quality.checks.entropy.entropy.toFixed(3)}</div>`
-    ];
-    document.getElementById('qualityChecks').innerHTML = checksHtml.join('');
+    badgeEl.className = 'signal-badge ' + signal.quality.badgeClass;
+    document.getElementById('qualityChecks').innerHTML =
+        '<div class="quality-check-item">Runs Test: ' + (signal.quality.checks.runsTest.flagged?'🔴':'🟢') + ' z=' + signal.quality.checks.runsTest.z.toFixed(3) + '</div>' +
+        '<div class="quality-check-item">Max Autocorr: ' + (signal.quality.checks.autocorrelation.flagged?'🔴':'🟢') + ' ρ=' + signal.quality.checks.autocorrelation.maxCorr.toFixed(3) + '</div>' +
+        '<div class="quality-check-item">Entropy: ' + (signal.quality.checks.entropy.flagged?'🔴':'🟢') + ' H=' + signal.quality.checks.entropy.entropy.toFixed(3) + '</div>';
 }
 
-// ===== EVENT LISTENERS =====
 scanBtn.addEventListener('click', scanAllMarkets);
-matchesBtn.addEventListener('click', () => runAnalysis('matches'));
-differsBtn.addEventListener('click', () => runAnalysis('differs'));
-overunderBtn.addEventListener('click', () => runAnalysis('overunder'));
+matchesBtn.addEventListener('click', function(){ runAnalysis('matches'); });
+differsBtn.addEventListener('click', function(){ runAnalysis('differs'); });
+overunderBtn.addEventListener('click', function(){ runAnalysis('overunder'); });
 
-// ===== INITIALIZE (gated behind login) =====
-initAuthGate();
+// ===== DERIV OAUTH — PKCE FLOW =====
+const CLIENT_ID = '33B44tAtovshdIedmNunD';
+const REDIRECT_URI = window.location.origin + window.location.pathname;
+let derivAccounts = [];
+let activeAccount = null;
+let derivAccessToken = null;
+
+function generateCodeVerifier() {
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    return btoa(String.fromCharCode.apply(null, array)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+async function generateCodeChallenge(verifier) {
+    const data = new TextEncoder().encode(verifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return btoa(String.fromCharCode.apply(null, new Uint8Array(digest))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+async function startDerivLogin() {
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
+    const state = crypto.randomUUID();
+    sessionStorage.setItem('pkce_code_verifier', codeVerifier);
+    sessionStorage.setItem('oauth_state', state);
+    const url = 'https://auth.deriv.com/oauth2/auth?response_type=code&client_id=' + CLIENT_ID + '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) + '&scope=trade+account_manage&state=' + state + '&code_challenge=' + codeChallenge + '&code_challenge_method=S256';
+    window.location.href = url;
+}
+async function handleOAuthCallback() {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const returnedState = params.get('state');
+    if (!code) return false;
+    const savedState = sessionStorage.getItem('oauth_state');
+    const codeVerifier = sessionStorage.getItem('pkce_code_verifier');
+    window.history.replaceState({}, '', window.location.pathname);
+    if (!savedState || returnedState !== savedState) {
+        document.getElementById('loginStatusMsg').textContent = 'Login verification failed (state mismatch). Please try again.';
+        return false;
+    }
+    try {
+        const exchangeRes = await fetch('/api/exchange', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: code, code_verifier: codeVerifier, client_id: CLIENT_ID, redirect_uri: REDIRECT_URI }),
+        });
+        const tokenData = await exchangeRes.json();
+        if (!exchangeRes.ok || !tokenData.access_token) {
+            document.getElementById('loginStatusMsg').textContent = 'Login failed during token exchange. Please try again.';
+            console.error('Token exchange failed', tokenData);
+            return false;
+        }
+        derivAccessToken = tokenData.access_token;
+        return true;
+    } catch (err) {
+        document.getElementById('loginStatusMsg').textContent = 'Network error during login. Please try again.';
+        console.error('Token exchange error', err);
+        return false;
+    }
+}
+async function fetchDerivAccounts() {
+    try {
+        const res = await fetch('https://api.derivws.com/trading/v1/options/accounts', {
+            headers: { 'Authorization': 'Bearer ' + derivAccessToken },
+        });
+        const data = await res.json();
+        const list = data.data || data.accounts || [];
+        derivAccounts = list.map(function(a) {
+            return {
+                accountId: a.id || a.account_id || a.loginid,
+                type: ((a.account_type || a.type || '') + '').toLowerCase().indexOf('demo') !== -1 ? 'demo' : 'real',
+                currency: a.currency || '',
+                balance: a.balance != null ? a.balance : null,
+            };
+        });
+    } catch (err) {
+        console.error('Failed to fetch accounts', err);
+        derivAccounts = [];
+    }
+}
+function renderAccountBar() {
+    let bar = document.getElementById('derivAccountBar');
+    if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'derivAccountBar';
+        document.getElementById('appContent').prepend(bar);
+    }
+    bar.innerHTML = '<select id="derivAcctSelect">' +
+        derivAccounts.map(function(a) {
+            return '<option value="' + a.accountId + '"' + (activeAccount && a.accountId===activeAccount.accountId ? ' selected' : '') + '>' +
+                (a.type==='demo'?'🟡 DEMO':'🟢 REAL') + ' — ' + a.accountId + ' — ' + (a.balance != null ? a.balance : '...') + ' ' + a.currency + '</option>';
+        }).join('') +
+        '</select><button id="derivDisconnectBtn">Disconnect</button>';
+    document.getElementById('derivAcctSelect').onchange = function(e) {
+        activeAccount = derivAccounts.find(function(a){ return a.accountId === e.target.value; });
+        renderAccountBar();
+    };
+    document.getElementById('derivDisconnectBtn').onclick = function() {
+        sessionStorage.clear();
+        location.reload();
+    };
+}
+
+document.getElementById('derivLoginBtn').addEventListener('click', startDerivLogin);
+
+(async function initAuthGate() {
+    const justLoggedIn = await handleOAuthCallback();
+    if (justLoggedIn) {
+        await fetchDerivAccounts();
+        if (derivAccounts.length) {
+            document.getElementById('loginGate').style.display = 'none';
+            document.getElementById('appContent').style.display = 'block';
+            activeAccount = derivAccounts.find(function(a){ return a.type === 'demo'; }) || derivAccounts[0];
+            renderAccountBar();
+            connectMarketWS();
+        } else {
+            document.getElementById('loginStatusMsg').textContent = 'Logged in, but no trading accounts were found on this profile.';
+        }
+    }
+})();
 </script>
 
 </body>
