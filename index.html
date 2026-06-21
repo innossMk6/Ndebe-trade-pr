@@ -394,7 +394,7 @@ overunderBtn.addEventListener('click', function(){ runAnalysis('overunder'); });
 
 // ===== DERIV OAUTH — PKCE FLOW =====
 const CLIENT_ID = '33B44tAtovshdIedmNunD';
-const REDIRECT_URI = window.location.origin + window.location.pathname;
+const REDIRECT_URI = (window.location.origin + window.location.pathname).replace(/\/?$/, '/');
 let derivAccounts = [];
 let activeAccount = null;
 let derivAccessToken = null;
@@ -415,7 +415,7 @@ async function startDerivLogin() {
     const state = crypto.randomUUID();
     sessionStorage.setItem('pkce_code_verifier', codeVerifier);
     sessionStorage.setItem('oauth_state', state);
-    const url = 'https://auth.deriv.com/oauth2/auth?response_type=code&client_id=' + CLIENT_ID + '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) + '&scope=trade+account_manage&state=' + state + '&code_challenge=' + codeChallenge + '&code_challenge_method=S256';
+    const url = 'https://auth.deriv.com/oauth2/auth?response_type=code&client_id=' + encodeURIComponent(CLIENT_ID) + '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) + '&scope=trade&state=' + encodeURIComponent(state) + '&code_challenge=' + encodeURIComponent(codeChallenge) + '&code_challenge_method=S256';
     window.location.href = url;
 }
 async function handleOAuthCallback() {
